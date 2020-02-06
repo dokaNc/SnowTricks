@@ -76,9 +76,17 @@ class UserAuthenticator extends AbstractFormLoginAuthenticator
 
     public function checkCredentials($credentials, UserInterface $user)
     {
-        // Check the user's password or other credentials and return true or false
+        $isValid = true;
+        if($user->getRegToken() !== null) {
+            // check if regToken is null
+            $isValid = false;
+        } else if (!$this->encodePassword->isPasswordValid($user, $credentials['password'])) {
+            // Check the user's password or other credentials and return true or false
+            $isValid = false;
+        }
+
         // If there are no credentials to check, you can just return true
-        return $this->encodePassword->isPasswordValid($user, $credentials['password']);
+        return $isValid;
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
@@ -87,7 +95,7 @@ class UserAuthenticator extends AbstractFormLoginAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        return new RedirectResponse($this->urlGenerator->generate('app_home'));
+        //return new RedirectResponse($this->urlGenerator->generate('app_home'));
     }
 
     protected function getLoginUrl()

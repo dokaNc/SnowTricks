@@ -32,6 +32,11 @@ class User implements UserInterface
      */
     private $password;
 
+    /**
+     * @ORM\Column(type="string", length=150, nullable=true)
+     */
+    private $reg_token;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -86,5 +91,17 @@ class User implements UserInterface
 
     public function eraseCredentials()
     {
+    }
+
+    public function getRegToken(): ?string
+    {
+        return $this->reg_token;
+    }
+
+    public function setRegToken(?string $reg_token): self
+    {
+        $this->reg_token = $reg_token;
+
+        return $this;
     }
 }

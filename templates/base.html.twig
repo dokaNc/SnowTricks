@@ -4,7 +4,8 @@
         <meta charset="UTF-8">
         <title>{% block title %} {% endblock %}</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-        {% block stylesheets %}{% endblock %}
+        {% block stylesheets %}
+        {% endblock %}
     </head>
     <body>
 
@@ -19,24 +20,42 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="{{ path('app_home') }}">Home <span class="sr-only">(current)</span></a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_register') }}">Sign up</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_login') }}">Sign in</a>
-                </li>
-                    {% if app.user %}
+                {% if app.user %}
                 <li class="nav-item">
                      <a class="nav-link"> Welcome {{ app.user.username }}</a>
                 </li>
                 <li>
                     <a class="nav-link" href="{{ path('app_logout') }}">Logout</a>
                 </li>
-                    {% endif %}
-
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_register') }}">Sign up</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_login') }}">Sign in</a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </nav>
+
+    {%  for message in app.flashes('info') %}
+        <div class="alert my-0 text-center  alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {%  for message in app.flashes('danger') %}
+        <div class="alert my-0 text-center  alert-danger">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {%  for message in app.flashes('warning') %}
+        <div class="alert my-0 text-center  alert-warning">
+            {{ message }}
+        </div>
+    {% endfor %}
 
         {% block body %}{% endblock %}
         {% block javascripts %}{% endblock %}
