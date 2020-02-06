@@ -52,7 +52,7 @@ class RegistrationController extends AbstractController
                 ->setSubject('Register confirmation link')
                 ->setBody($this->renderView('email/register.html.twig', ['token' => $regToken]), 'text/html');
             $mailer->send($message);
-            $this->addFlash('info', 'Check your email and click on the confirmation link, thank you.');
+            $this->addFlash('warning', 'Check your email and click on the confirmation link, thank you.');
 
             return $this->redirectToRoute('app_home');
 
