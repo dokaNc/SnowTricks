@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Add tricks' %}
+
+{% block body %}
+        <div class="container">
+
+            <h1>Manage tricks</h1>
+
+            <table class="table tabler-stripped">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {%  for tricks in tricks %}
+                    <tr>
+                        <td>{{ tricks.name }}</td>
+                        <td>
+                            <a href="{{ path('user.tricks.edit', {id: tricks.id}) }}" class="btn btn-secondary">Edit</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+{% endblock %}
