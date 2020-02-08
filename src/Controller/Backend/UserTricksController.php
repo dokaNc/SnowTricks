@@ -5,9 +5,10 @@ namespace App\Controller\Backend;
 use App\Entity\Tricks;
 use App\Form\TricksType;
 use App\Repository\TricksRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class UserTricksController extends AbstractController
@@ -22,7 +23,7 @@ class UserTricksController extends AbstractController
     private $entityManager;
 
 
-    public function __construct(TricksRepository $repository, \Doctrine\Common\Persistence\ManagerRegistry $entityManager)
+    public function __construct(TricksRepository $repository, ObjectManager $entityManager)
     {
 
         $this->repository = $repository;
@@ -49,9 +50,9 @@ class UserTricksController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($tricks);
-            $entityManager->flush();
+            $this->entityManager->persist($tricks);
+            $this->entityManager->flush();
+            $this->addFlash('info', 'Your Tricks have been added');
             return $this->redirectToRoute('user.tricks.index');
         }
 
@@ -62,7 +63,7 @@ class UserTricksController extends AbstractController
     }
 
     /**
-     * @Route("/user/{id}", name="user.tricks.edit")
+     * @Route("/user/{id}", name="user.tricks.edit", methods="GET|POST")
      * @param Tricks $tricks
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
@@ -73,8 +74,8 @@ class UserTricksController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->flush();
+            $this->entityManager->flush();
+            $this->addFlash('info', 'Your Tricks have been edited');
             return $this->redirectToRoute('user.tricks.index');
         }
 
@@ -82,5 +83,20 @@ class UserTricksController extends AbstractController
             'tricks' => $tricks,
             'form' => $form->createView()
         ]);
+    }
+
+    /**
+     * @Route("/user/{id}", name="user.tricks.delete", methods="DELETE")
+     * @param Tricks $tricks
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function delete(Tricks $tricks, Request $request)
+    {
+        if ($this->isCsrfTokenValid('delete' . $tricks->getId(), $request->get('_token'))) {
+            $this->entityManager->remove($tricks);
+            $this->entityManager->flush();
+            $this->addFlash('info', 'Your Tricks have been deleted');
+        }
+        return $this->redirectToRoute('user.tricks.index');
     }
 }
