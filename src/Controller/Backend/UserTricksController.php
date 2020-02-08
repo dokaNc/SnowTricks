@@ -40,6 +40,28 @@ class UserTricksController extends AbstractController
     }
 
     /**
+     * @Route ("/user/tricks/create", name="user.tricks.new")
+     */
+    public function new(Request $request)
+    {
+        $tricks = new Tricks();
+        $form = $this->createForm(TricksType::class, $tricks);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($tricks);
+            $entityManager->flush();
+            return $this->redirectToRoute('user.tricks.index');
+        }
+
+        return $this->render('user/tricks/new.html.twig', [
+            'tricks' => $tricks,
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
      * @Route("/user/{id}", name="user.tricks.edit")
      * @param Tricks $tricks
      * @param Request $request
