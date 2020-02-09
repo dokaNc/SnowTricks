@@ -7,10 +7,11 @@
 
             <h1>Manage tricks</h1>
 
-            <table class="table tabler-stripped">
+            <table class="table table-stripped">
                 <thead>
                 <tr>
                     <th>Name</th>
+                    <th>Category</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -18,6 +19,7 @@
                 {%  for tricks in tricks %}
                     <tr>
                         <td>{{ tricks.name }}</td>
+                        <td>{{ tricks.category }}</td>
                         <td>
                             <a href="{{ path('user.tricks.edit', {id: tricks.id}) }}" class="btn btn-secondary">Edit</a>
                             <form method="post" action="{{ path('user.tricks.delete', {id: tricks.id}) }}" style="display: inline-block" onsubmit="return confirm('Are you sure to delete this Tricks ?')">
