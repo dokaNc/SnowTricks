@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Edit tricks' %}
+
+{% block body %}
+
+    <div class="container mt-4">
+        <h2>Edit Tricks</h2>
+        {{ include ('user/tricks/_form.html.twig', {button: 'Edit'}) }}
+    </div>
+
+{% endblock %}

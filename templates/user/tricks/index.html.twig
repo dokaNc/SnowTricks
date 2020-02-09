@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Add tricks' %}
+
+{% block body %}
+        <div class="container">
+
+            <h1>Manage tricks</h1>
+
+            <table class="table tabler-stripped">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {%  for tricks in tricks %}
+                    <tr>
+                        <td>{{ tricks.name }}</td>
+                        <td>
+                            <a href="{{ path('user.tricks.edit', {id: tricks.id}) }}" class="btn btn-secondary">Edit</a>
+                            <form method="post" action="{{ path('user.tricks.delete', {id: tricks.id}) }}" style="display: inline-block" onsubmit="return confirm('Are you sure to delete this Tricks ?')">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tricks.id) }}">
+                                <button class="btn btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="text-right">
+                <a class="btn btn-primary" href="{{ path('user.tricks.new') }}">Create Tricks</a>
+            </div>
+        </div>
+{% endblock %}

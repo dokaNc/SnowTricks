@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Cocur\Slugify\Slugify;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TricksRepository")
@@ -36,15 +37,10 @@ class Tricks
      */
     private $datePost;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $dateUpdate;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $picture;
+    public function __construct()
+    {
+        $this->datePost = new \DateTime('now');
+    }
 
     public function getId(): ?int
     {
@@ -61,6 +57,11 @@ class Tricks
         $this->name = $name;
 
         return $this;
+    }
+
+    public function getSlug(): string
+    {
+        return (new Slugify())->slugify($this->name);
     }
 
     public function getContent(): ?string
@@ -95,30 +96,6 @@ class Tricks
     public function setDatePost(\DateTimeInterface $datePost): self
     {
         $this->datePost = $datePost;
-
-        return $this;
-    }
-
-    public function getDateUpdate(): ?\DateTimeInterface
-    {
-        return $this->dateUpdate;
-    }
-
-    public function setDateUpdate(\DateTimeInterface $dateUpdate): self
-    {
-        $this->dateUpdate = $dateUpdate;
-
-        return $this;
-    }
-
-    public function getPicture(): ?string
-    {
-        return $this->picture;
-    }
-
-    public function setPicture(string $picture): self
-    {
-        $this->picture = $picture;
 
         return $this;
     }
