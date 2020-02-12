@@ -21,7 +21,7 @@
                                 <a href="{{ path('tricks.show', {id: tricks.id, slug: tricks.slug}) }}">{{ tricks.name }}</a>
                             </h5>
                             <p class="card-text">{{ tricks.content }}</p>
-                            <div class="text-danger">Category : Easy</div>
+                            <div class="text-danger">Category : {{ tricks.category }}</div>
                         </div>
                     </div>
                 </div>
