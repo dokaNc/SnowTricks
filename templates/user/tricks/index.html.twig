@@ -12,6 +12,7 @@
                 <tr>
                     <th>Name</th>
                     <th>Category</th>
+                    <th>Image</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -20,6 +21,9 @@
                     <tr>
                         <td>{{ tricks.name }}</td>
                         <td>{{ tricks.category }}</td>
+                        <td>{% if tricks.thumbnail %}
+                            <img src="/uploads/files/{{ tricks.thumbnail }}" style="width: 50px; height: auto;">
+                            {% endif %}</td>
                         <td>
                             <a href="{{ path('user.tricks.edit', {id: tricks.id}) }}" class="btn btn-secondary">Edit</a>
                             <form method="post" action="{{ path('user.tricks.delete', {id: tricks.id}) }}" style="display: inline-block" onsubmit="return confirm('Are you sure to delete this Tricks ?')">

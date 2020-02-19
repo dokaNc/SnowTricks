@@ -5,11 +5,10 @@
 {% block body %}
     <div class="container">
         <form method="post">
-            {% if error %}
-                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-            {% endif %}
-
             <h1 class="h3 mb-5 mt-3 text-center font-weight-bold">Sign in</h1>
+            {% if error %}
+                <div class="alert alert-danger">{{ error.messageKey | trans(error.messageData, 'security') }}</div>
+            {% endif %}
             <div class="form-group">
                 <label for="inputUsername">Username</label>
                 <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" required autofocus>
