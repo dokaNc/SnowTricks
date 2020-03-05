@@ -78,12 +78,20 @@ class UserTricksController extends AbstractController
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function edit(Tricks $tricks, Request $request)
+    public function edit(Tricks $tricks, Request $request, FileUploader $fileUploader)
     {
         $form = $this->createForm(TricksType::class, $tricks);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            /** @var UploadedFile $mainImage */
+            $mainImageFile = $form['image']->getData();
+            if ($mainImageFile) {
+                $mainImage = $fileUploader->upload($mainImageFile);
+                $tricks->setMainImage($mainImage);
+            }
+
             $this->entityManager->flush();
             $this->addFlash('info', 'Your Tricks have been edited');
             return $this->redirectToRoute('user.tricks.index');
