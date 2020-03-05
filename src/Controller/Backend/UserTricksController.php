@@ -2,13 +2,14 @@
 
 namespace App\Controller\Backend;
 
+use App\Service\FileUploader;
 use App\Entity\Tricks;
 use App\Form\TricksType;
 use App\Repository\TricksRepository;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class UserTricksController extends AbstractController
@@ -43,13 +44,22 @@ class UserTricksController extends AbstractController
     /**
      * @Route ("/user/tricks/create", name="user.tricks.new")
      */
-    public function new(Request $request)
+    public function new(Request $request, FileUploader $fileUploader)
     {
         $tricks = new Tricks();
         $form = $this->createForm(TricksType::class, $tricks);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            /** @var UploadedFile $mainImage */
+            $mainImageFile = $form['image']->getData();
+            if ($mainImageFile) {
+                $mainImage = $fileUploader->upload($mainImageFile);
+                $tricks->setMainImage($mainImage);
+            }
+
+
             $this->entityManager->persist($tricks);
             $this->entityManager->flush();
             $this->addFlash('info', 'Your Tricks have been added');

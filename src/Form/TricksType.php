@@ -4,9 +4,10 @@ namespace App\Form;
 
 use App\Entity\Tricks;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Vich\UploaderBundle\Form\Type\VichFileType;
+use Symfony\Component\Validator\Constraints\File;
 
 class TricksType extends AbstractType
 {
@@ -16,10 +17,21 @@ class TricksType extends AbstractType
             ->add('name')
             ->add('content')
             ->add('category')
-            ->add('thumbnailFile', VichFileType::class, [
+            ->add('image', FileType::class, [
+                'label' => 'Upload your main image',
+                'mapped' => false,
                 'required' => false,
-                'label' => 'Upload image',
-                ]);
+                'constraints' => [
+                    new File([
+                        'maxSize' => '2000k',
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/png'
+                        ],
+                        'mimeTypesMessage' => 'Please upload a valid JPEG or PNG file',
+                    ])
+                ],
+    ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

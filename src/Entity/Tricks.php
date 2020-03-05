@@ -2,15 +2,11 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Cocur\Slugify\Slugify;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TricksRepository")
- * @Vich\Uploadable()
  */
 class Tricks
 {
@@ -42,50 +38,13 @@ class Tricks
     private $datePost;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="string", nullable=true)
      */
-    private $updatedAt;
-
-    /**
-     * @ORM\Column(type="string", length=200)
-     */
-    private $thumbnail;
-
-    /**
-     * @Vich\UploadableField(mapping="tricks_thumbnails", fileNameProperty="thumbnail")
-     */
-    private $thumbnailFile;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Attachment", mappedBy="tricks", cascade={"persist"})
-     */
-    private $attachments;
-
-    /**
-     * @return mixed
-     */
-    public function getThumbnailFile()
-    {
-        return $this->thumbnailFile;
-    }
-
-    /**
-     * @param mixed $thumbnailFile
-     * @throws \Exception
-     */
-    public function setThumbnailFile($thumbnailFile): void
-    {
-        $this->thumbnailFile = $thumbnailFile;
-        if ($thumbnailFile) {
-            $this->updatedAt = new \DateTime();
-        }
-    }
+    private $mainImage;
 
     public function __construct()
     {
         $this->datePost = new \DateTime('now');
-        $this->updatedAt = new \DateTime();
-        $this->attachments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -146,57 +105,14 @@ class Tricks
         return $this;
     }
 
-    public function getThumbnail(): ?string
+    public function getMainImage(): ?string
     {
-        return $this->thumbnail;
+        return $this->mainImage;
     }
 
-    public function setThumbnail(?string $thumbnail): self
+    public function setMainImage(string $mainImage): self
     {
-        $this->thumbnail = $thumbnail;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Attachment[]
-     */
-    public function getAttachments(): Collection
-    {
-        return $this->attachments;
-    }
-
-    public function addAttachment(Attachment $attachment): self
-    {
-        if (!$this->attachments->contains($attachment)) {
-            $this->attachments[] = $attachment;
-            $attachment->setPost($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAttachment(Attachment $attachment): self
-    {
-        if ($this->attachments->contains($attachment)) {
-            $this->attachments->removeElement($attachment);
-            // set the owning side to null (unless already changed)
-            if ($attachment->getPost() === $this) {
-                $attachment->setPost(null);
-            }
-        }
+        $this->mainImage = $mainImage;
 
         return $this;
     }
