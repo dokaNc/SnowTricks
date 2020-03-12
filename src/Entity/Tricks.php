@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Cocur\Slugify\Slugify;
 
@@ -35,16 +37,58 @@ class Tricks
     /**
      * @ORM\Column(type="datetime")
      */
-    private $datePost;
+    private $createdAt;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="datetime")
+     */
+    private $updatedAt;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $mainImage;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="tricks", cascade={"persist"})
+     */
+    private $images;
+
+    /**
+     * toString
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->getId();
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getImages()
+    {
+        return $this->images;
+    }
+
+    /**
+     * @param mixed $images
+     * @throws \Exception
+     */
+    public function setImages($images): void
+    {
+        $this->images = $images;
+        if ($images) {
+            $this->updatedAt = new \DateTime();
+        }
+    }
+
     public function __construct()
     {
-        $this->datePost = new \DateTime('now');
+        $this->images = new ArrayCollection();
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
     }
 
     public function getId(): ?int
@@ -93,26 +137,63 @@ class Tricks
         return $this;
     }
 
-    public function getDatePost(): ?\DateTimeInterface
-    {
-        return $this->datePost;
-    }
-
-    public function setDatePost(\DateTimeInterface $datePost): self
-    {
-        $this->datePost = $datePost;
-
-        return $this;
-    }
-
     public function getMainImage(): ?string
     {
         return $this->mainImage;
     }
 
-    public function setMainImage(string $mainImage): self
+    public function setMainImage(?string $mainImage): self
     {
         $this->mainImage = $mainImage;
+
+        return $this;
+    }
+
+    public function addImage(Image $image): self
+    {
+        if (!$this->images->contains($image)) {
+            $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
+
+            $this->images[] = $image;
+            $image->setTricks($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Image $image): self
+    {
+        if ($this->images->contains($image)) {
+            $this->images->removeElement($image);
+            // set the owning side to null (unless already changed)
+            if ($image->getTricks() === $this) {
+                $image->setTricks(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }

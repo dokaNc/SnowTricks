@@ -16,9 +16,6 @@
             {%  for tricks in tricks %}
                 <div class="col-3">
                     <div class="card">
-                        {% if tricks.thumbnail %}
-                            <img src="/uploads/files/{{ tricks.thumbnail }}" style="width: 100%; height: auto;">
-                        {% endif %}
                         <div class="card-body">
                             <h5 class="card-tile">
                                 <a href="{{ path('tricks.show', {id: tricks.id, slug: tricks.slug}) }}">{{ tricks.name }}</a>

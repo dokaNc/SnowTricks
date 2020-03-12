@@ -4,10 +4,10 @@ namespace App\Form;
 
 use App\Entity\Tricks;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\File;
 
 class TricksType extends AbstractType
 {
@@ -17,21 +17,20 @@ class TricksType extends AbstractType
             ->add('name')
             ->add('content')
             ->add('category')
-            ->add('image', FileType::class, [
-                'label' => 'Upload your main image',
-                'mapped' => false,
-                'required' => false,
-                'constraints' => [
-                    new File([
-                        'maxSize' => '2000k',
-                        'mimeTypes' => [
-                            'image/jpeg',
-                            'image/png'
-                        ],
-                        'mimeTypesMessage' => 'Please upload a valid JPEG or PNG file',
-                    ])
-                ],
-    ]);
+            ->add('mainImage', FileType::class, [
+                'data_class' => null,
+                'attr'     => [
+                    'accept' => 'image/*',
+                ]
+            ])
+            ->add('images', CollectionType::class, [
+                'entry_type' => ImageType::class,
+                'allow_add' => true,
+                'attr'     => [
+                    'accept' => 'image/*',
+                ]
+            ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
