@@ -26,11 +26,15 @@ class TricksType extends AbstractType
             ->add('images', CollectionType::class, [
                 'entry_type' => ImageType::class,
                 'allow_add' => true,
+                'allow_delete'  => true,
+                'entry_options' => [
+                    'by_reference'  => false,
+                    'label' => false
+                ],
                 'attr'     => [
                     'accept' => 'image/*',
                 ]
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

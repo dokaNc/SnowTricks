@@ -5,6 +5,9 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Cocur\Slugify\Slugify;
 
 /**
@@ -45,44 +48,16 @@ class Tricks
     private $updatedAt;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255)
      */
     private $mainImage;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="tricks", cascade={"persist"})
+     * @var Collection
      */
     private $images;
 
-    /**
-     * toString
-     * @return string
-     */
-    public function __toString(): string
-    {
-        return $this->getId();
-    }
-
-
-    /**
-     * @return mixed
-     */
-    public function getImages()
-    {
-        return $this->images;
-    }
-
-    /**
-     * @param mixed $images
-     * @throws \Exception
-     */
-    public function setImages($images): void
-    {
-        $this->images = $images;
-        if ($images) {
-            $this->updatedAt = new \DateTime();
-        }
-    }
 
     public function __construct()
     {
@@ -94,6 +69,14 @@ class Tricks
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id): void
+    {
+        $this->id = $id;
     }
 
     public function getName(): ?string
@@ -149,31 +132,6 @@ class Tricks
         return $this;
     }
 
-    public function addImage(Image $image): self
-    {
-        if (!$this->images->contains($image)) {
-            $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
-
-            $this->images[] = $image;
-            $image->setTricks($this);
-        }
-
-        return $this;
-    }
-
-    public function removeImage(Image $image): self
-    {
-        if ($this->images->contains($image)) {
-            $this->images->removeElement($image);
-            // set the owning side to null (unless already changed)
-            if ($image->getTricks() === $this) {
-                $image->setTricks(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
@@ -194,6 +152,49 @@ class Tricks
     public function setUpdatedAt(\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Image[]
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    /**
+     * @param mixed $images
+     * @throws \Exception
+     */
+    public function setImages($images): void
+    {
+        $this->images = $images;
+        if ($images) {
+            $this->updatedAt = new \DateTime();
+        }
+    }
+
+    public function addImage(Image $image): self
+    {
+        if (!$this->images->contains($image)) {
+            $this->images[] = $image;
+            $image->setTricks($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Image $image): self
+    {
+        if ($this->images->contains($image)) {
+            $this->images->removeElement($image);
+            // set the owning side to null (unless already changed)
+            if ($image->getTricks() === $this) {
+                $image->setTricks(null);
+            }
+        }
 
         return $this;
     }

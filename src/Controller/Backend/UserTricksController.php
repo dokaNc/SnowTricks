@@ -53,14 +53,10 @@ class UserTricksController extends AbstractController
     public function new(Request $request, FileUploader $fileUploader)
     {
         $tricks = new Tricks();
+        $image = new Image();
         $tricks->setName('Name');
         $tricks->setContent('Content');
         $tricks->setCategory('Category');
-
-
-        $image = new Image();
-        $tricks->addImage($image);
-
 
         $form = $this->createForm(TricksType::class, $tricks);
         $form->handleRequest($request);
@@ -71,8 +67,14 @@ class UserTricksController extends AbstractController
             if ($mainImageFile) {
                 $mainImage = $fileUploader->upload($mainImageFile);
                 $tricks->setMainImage($mainImage);
-                dd($image);
             }
+            $imageTest = $form['mainImage']->getData();
+            if ($imageTest) {
+                $image = $fileUploader->upload($imageTest);
+                $tricks->setImages($image);
+            }
+
+            var_dump($tricks);
 
             $this->entityManager->persist($tricks);
             $this->entityManager->flush();

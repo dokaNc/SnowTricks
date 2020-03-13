@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ImageRepository")
@@ -24,30 +25,9 @@ class Image
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Tricks", inversedBy="images")
-     *
+     * @var Collection
      */
     private $tricks;
-
-    /**
-     * @return mixed
-     */
-
-    public function getImages()
-    {
-        return $this->image;
-    }
-
-    /**
-     * @param mixed $image
-     * @throws \Exception
-     */
-    public function setImages(?File $image): void
-    {
-        $this->image = $image;
-        if ($image) {
-            $this->updatedAt = new \DateTime();
-        }
-    }
 
     /**
      * @ORM\Column(type="datetime")
@@ -61,6 +41,7 @@ class Image
 
     public function __construct()
     {
+        $this->tricks = new ArrayCollection();
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
     }
@@ -116,6 +97,9 @@ class Image
     public function setImage(?string $image): self
     {
         $this->image = $image;
+        if ($image) {
+            $this->updatedAt = new \DateTime();
+        }
 
         return $this;
     }
