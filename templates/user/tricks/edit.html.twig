@@ -3,10 +3,26 @@
 {% block title 'Edit tricks' %}
 
 {% block body %}
+    <div class="container">
+        <div class="container mt-4">
+            <h2>Edit Tricks</h2>
 
-    <div class="container mt-4">
-        <h2>Edit Tricks</h2>
-        {{ include ('user/tricks/_form.html.twig') }}
+            {{ form_start(form) }}
+            {{ form_rest(form) }}
+
+            <div class="mb-3">
+                {% include 'includes/images.html.twig' %}
+            </div>
+
+            <div class="float-left">
+                <a href="{{ path('image.add', {'tricks': tricks.id}) }}" class="btn btn-warning shadow">Add images</a>
+            </div>
+
+            <div class="float-right">
+                <button class="btn btn-primary shadow">{{ button|default('Save') }}</button>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
     </div>
-
 {% endblock %}

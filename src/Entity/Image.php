@@ -2,8 +2,6 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -19,15 +17,14 @@ class Image
     private $id;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $mainImage;
+
+    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $image;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Tricks", inversedBy="images")
-     * @var Collection
-     */
-    private $tricks;
 
     /**
      * @ORM\Column(type="datetime")
@@ -39,9 +36,18 @@ class Image
      */
     private $updatedAt;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Tricks", inversedBy="images")
+     */
+    private $tricks;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $active;
+
     public function __construct()
     {
-        $this->tricks = new ArrayCollection();
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
     }
@@ -51,19 +57,6 @@ class Image
     {
         return $this->id;
     }
-
-    public function getTricks(): ?Tricks
-    {
-        return $this->tricks;
-    }
-
-    public function setTricks(?Tricks $tricks): self
-    {
-        $this->tricks = $tricks;
-
-        return $this;
-    }
-
 
     public function getCreatedAt(): ?\DateTimeInterface
     {
@@ -100,6 +93,42 @@ class Image
         if ($image) {
             $this->updatedAt = new \DateTime();
         }
+
+        return $this;
+    }
+
+    public function getTricks(): ?Tricks
+    {
+        return $this->tricks;
+    }
+
+    public function setTricks(?Tricks $tricks): self
+    {
+        $this->tricks = $tricks;
+
+        return $this;
+    }
+
+    public function getMainImage(): ?bool
+    {
+        return $this->mainImage;
+    }
+
+    public function setMainImage(bool $mainImage): self
+    {
+        $this->mainImage = $mainImage;
+
+        return $this;
+    }
+
+    public function getActive(): ?bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): self
+    {
+        $this->active = $active;
 
         return $this;
     }

@@ -16,7 +16,9 @@ class FileUploader
 
     public function upload(UploadedFile $file)
     {
-        $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
+        $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $fileName = $originalFilename.'-'.uniqid().'.'.$file->guessExtension();
+
         try {
             $file->move($this->getTargetDirectory(), $fileName);
         } catch (FileException $e) {

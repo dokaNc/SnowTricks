@@ -1,4 +1,9 @@
+{% block stylesheets %}
+    <link rel="stylesheet" href="/css/tricks.css">
+{% endblock %}
+
 {{ form_start(form) }}
 {{ form_rest(form) }}
 <button class="btn btn-primary">{{ button|default('Save') }}</button>
+{% include 'includes/images.html.twig' %}
 {{ form_end(form) }}

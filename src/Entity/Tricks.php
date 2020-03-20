@@ -5,9 +5,6 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Cocur\Slugify\Slugify;
 
 /**
@@ -48,22 +45,15 @@ class Tricks
     private $updatedAt;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $mainImage;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="tricks", cascade={"persist"})
-     * @var Collection
+     * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="tricks")
      */
     private $images;
 
-
     public function __construct()
     {
-        $this->images = new ArrayCollection();
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
+        $this->images = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -120,18 +110,6 @@ class Tricks
         return $this;
     }
 
-    public function getMainImage(): ?string
-    {
-        return $this->mainImage;
-    }
-
-    public function setMainImage(?string $mainImage): self
-    {
-        $this->mainImage = $mainImage;
-
-        return $this;
-    }
-
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
@@ -164,18 +142,6 @@ class Tricks
         return $this->images;
     }
 
-    /**
-     * @param mixed $images
-     * @throws \Exception
-     */
-    public function setImages($images): void
-    {
-        $this->images = $images;
-        if ($images) {
-            $this->updatedAt = new \DateTime();
-        }
-    }
-
     public function addImage(Image $image): self
     {
         if (!$this->images->contains($image)) {
@@ -198,4 +164,5 @@ class Tricks
 
         return $this;
     }
+
 }

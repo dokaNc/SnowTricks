@@ -2,15 +2,12 @@
 
 namespace App\Controller\Backend;
 
-use App\Entity\Image;
-use App\Form\ImageType;
 use App\Service\FileUploader;
 use App\Entity\Tricks;
 use App\Form\TricksType;
 use App\Repository\TricksRepository;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -20,6 +17,7 @@ class UserTricksController extends AbstractController
      * @var TricksRepository
      */
     private $repository;
+
     /**
      * @var \Doctrine\Common\Persistence\ManagerRegistry
      */
@@ -34,7 +32,7 @@ class UserTricksController extends AbstractController
     }
 
     /**
-     * @Route("/user", name="user.tricks.index")
+     * @Route("/user/tricks", name="user.tricks.index")
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function index ()
@@ -53,43 +51,28 @@ class UserTricksController extends AbstractController
     public function new(Request $request, FileUploader $fileUploader)
     {
         $tricks = new Tricks();
-        $image = new Image();
-        $tricks->setName('Name');
-        $tricks->setContent('Content');
-        $tricks->setCategory('Category');
 
         $form = $this->createForm(TricksType::class, $tricks);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid())
         {
-            /** @var UploadedFile $mainImage */
-            $mainImageFile = $form['mainImage']->getData();
-            if ($mainImageFile) {
-                $mainImage = $fileUploader->upload($mainImageFile);
-                $tricks->setMainImage($mainImage);
-            }
-            $imageTest = $form['mainImage']->getData();
-            if ($imageTest) {
-                $image = $fileUploader->upload($imageTest);
-                $tricks->setImages($image);
-            }
-
-            var_dump($tricks);
 
             $this->entityManager->persist($tricks);
             $this->entityManager->flush();
-            $this->addFlash('info', 'Your Tricks have been added');
-            return $this->redirectToRoute('user.tricks.index');
+            $this->addFlash('info', 'Your Tricks have been added, thank you.');
+            $this->addFlash('warning', 'Add your image now !');
+            return $this->redirectToRoute('user.tricks.edit', ['id' => $tricks->getId()]);
         }
 
         return $this->render('user/tricks/new.html.twig', [
             'tricks' => $tricks,
+            'current_menu' => 'new',
             'form' => $form->createView()
         ]);
     }
 
     /**
-     * @Route("/user/{id}", name="user.tricks.edit", methods="GET|POST")
+     * @Route("/user/tricks/{id}", name="user.tricks.edit", methods="GET|POST")
      * @param Tricks $tricks
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
@@ -101,15 +84,8 @@ class UserTricksController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            /** @var UploadedFile $mainImage */
-            $mainImageFile = $form['mainImage']->getData();
-            if ($mainImageFile) {
-                $mainImage = $fileUploader->upload($mainImageFile);
-                $tricks->setMainImage($mainImage);
-            }
-
             $this->entityManager->flush();
-            $this->addFlash('info', 'Your Tricks have been edited');
+            $this->addFlash('info', 'Your Tricks have been edited, thank you.');
             return $this->redirectToRoute('user.tricks.index');
         }
 
@@ -120,7 +96,7 @@ class UserTricksController extends AbstractController
     }
 
     /**
-     * @Route("/user/{id}", name="user.tricks.delete", methods="DELETE")
+     * @Route("/user/tricks/{id}", name="user.tricks.delete", methods="DELETE")
      * @param Tricks $tricks
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */

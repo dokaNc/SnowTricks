@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="d-flex justify-content-center vh-100 w-100" style="margin-top: 50px">
+        <div class="col-lg-10">
+            <div class="container text-center">
+                <h4>Add image for your Tricks</h4>
+                {{ form_start(formImage) }}
+                <div class="row p-10">
+                    <div class="col">{{ form_widget(formImage.image) }}</div>
+                </div>
+                <div class="row p-4">
+                    <div class="btn btn-success col" style="margin-right: 1%">{{ form_widget(formImage.mainImage) }}</div>
+                    <div class="btn btn-success col" style="margin-right: 1%">{{ form_widget(formImage.active) }}</div>
+                    <input type="submit" class="btn btn-primary col-md-8" value="Save">
+                </div>
+                {{ form_end(formImage) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
