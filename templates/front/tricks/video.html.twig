@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="d-flex justify-content-center vh-100 w-100" style="margin-top: 50px">
+        <div class="col-lg-10">
+            <div class="container text-center">
+                <h4>Add video for your Tricks</h4>
+                {{ form_start(formVideo) }}
+                <div class="row p-10">
+                    <div class="col">{{ form_widget(formVideo.url) }}</div>
+                </div>
+                <div class="row p-4">
+                    <div class="btn btn-success col" style="margin-right: 1%">{{ form_widget(formVideo.active) }}</div>
+                    <input type="submit" class="btn btn-primary col-md-8" value="Save">
+                </div>
+                {{ form_end(formVideo) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
