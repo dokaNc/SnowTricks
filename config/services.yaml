@@ -4,8 +4,10 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    uploads_path: '%kernel.project_dir%/public/uploads/images'
 
 services:
+
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
@@ -16,6 +18,10 @@ services:
     App\:
         resource: '../src/*'
         exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+
+    App\Service\FileUploader:
+        arguments:
+            $targetDirectory: '%kernel.project_dir%/public/uploads/images'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
