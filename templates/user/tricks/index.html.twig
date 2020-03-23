@@ -22,7 +22,7 @@
                         <td>{{ tricks.category }}</td>
                         <td>
                             <a href="{{ path('user.tricks.edit', {id: tricks.id}) }}" class="btn btn-secondary">Edit</a>
-                            <form method="post" action="{{ path('user.tricks.delete', {id: tricks.id}) }}" style="display: inline-block" onsubmit="return confirm('Are you sure to delete this Tricks ?')">
+                            <form method="post" action="{{ path('tricks.delete', {id: tricks.id}) }}" style="display: inline-block" onsubmit="return confirm('Are you sure to delete this Tricks ?')">
                                 <input type="hidden" name="_method" value="DELETE">
                                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tricks.id) }}">
                                 <button class="btn btn-danger">Delete</button>

@@ -1,28 +1,77 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="">
+{% endblock %}
+
 {% block title 'Edit tricks' %}
 
 {% block body %}
-    <div class="container">
-        <div class="container mt-4">
-            <h2>Edit Tricks</h2>
+    {% for image in tricks.images %}
+        {% if image.mainImage == 1 and image.active == 1 %}
+            <figure class="position-relative">
+                <img class="img-fluid" style="filter: brightness(50%);"
+                     src="/uploads/images/{{ image.image }}" alt=""/>
+                <figcaption>
+                    <h1 class="text-white position-absolute" style="top: 50%; left: 35%">{{ tricks.name }}</h1>
+                </figcaption>
+            </figure>
+        {% endif %}
+    {% endfor %}
+    <div class="container-fluid">
+        {% include 'includes/source.html.twig' %}
+        <div class="col-md-12 p-3 shadow-lg">
+            <div class="container">
+                {% include 'includes/flashMessage.html.twig' %}
+                {{ form_start(form) }}
+                <div class="p-3">
+                    <div class="form-group row">
+                        <label for="staticEmail" class="col-sm-2 col-form-label">{{ form_label(form.name) }}</label>
+                        <div class="col-sm-10">
+                            {{ form_widget(form.name) }}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="staticEmail"
+                               class="col-sm-2 col-form-label">{{ form_label(form.content) }}</label>
+                        <div class="col-sm-10">
+                            {{ form_widget(form.content) }}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="staticEmail"
+                               class="col-sm-2 col-form-label">{{ form_label(form.category) }}</label>
+                        <div class="col-sm-10">
+                            {{ form_widget(form.category) }}
+                        </div>
+                    </div>
+                    <p>{{ form_rest(form) }}</p>
+                </div>
+                <div class="container">
+                    <div class="float-left">
+                        <input class="btn btn-primary" type="submit" value="Save">
+                        {% if app.user.id is defined %}
+                            <a class="btn btn-danger delete" href="{{ path('tricks.delete', {'id': tricks.id}) }}"><i
+                                        class="fa fa-trash"></i> Delete</a>
+                        {% endif %}
+                    </div>
+                    <div class="float-right">
+                        <a href="{{ path('image.add', {'tricks': tricks.id}) }}" class="btn btn-default border shadow">Add image</a>
+                        <a href="{{ path('video.add', {'tricks': tricks.id}) }}" class="btn btn-default border shadow">Add video</a>
+                    </div>
+                </div>
+                <p class="text-center">
+                    <a class="badge badge-primary">Created on {{ tricks.createdAt|date("d/m/Y H:i:s") }} </a>
+                    <a class="badge badge-primary">Updated on {{ tricks.updatedAt|date("d/m/Y H:i:s") }} </a>
 
-            {{ form_start(form) }}
-            {{ form_rest(form) }}
-
-            <div class="mb-3">
-                {% include 'includes/images.html.twig' %}
+                <div class="mb-5"></div>
+                {{ form_end(form) }}
+                <hr/>
             </div>
-
-            <div class="float-left">
-                <a href="{{ path('image.add', {'tricks': tricks.id}) }}" class="btn btn-warning shadow">Add images</a>
-            </div>
-
-            <div class="float-right">
-                <button class="btn btn-primary shadow">{{ button|default('Save') }}</button>
-            </div>
-
-            {{ form_end(form) }}
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="/js/tricks.js"></script>
 {% endblock %}

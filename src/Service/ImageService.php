@@ -22,12 +22,11 @@ class ImageService extends AbstractController
     /**
      * @var EntityManagerInterface
      */
-
     private $entityManager;
+
     /**
      * @var FileUploader
      */
-
     private $fileUploader;
 
     public function __construct(EntityManagerInterface $entityManager,
@@ -66,14 +65,13 @@ class ImageService extends AbstractController
     public function deleteImage(Image $image)
     {
         $filesystem = new Filesystem();
-        $imagePath = 'images/tricks/'.$image->getName();
+        $imagePath = 'uploads/images/'.$image->getImage();
 
         if ($filesystem->exists($imagePath)) {
             $filesystem->remove($imagePath);
         }
         $this->entityManager->remove($image);
         $this->entityManager->flush();
-        $this->session->getFlashBag()->add('success', 'Image supprimée');
     }
 
 }

@@ -49,11 +49,17 @@ class Tricks
      */
     private $images;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Video", mappedBy="tricks")
+     */
+    private $videos;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
         $this->images = new ArrayCollection();
+        $this->videos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -77,7 +83,9 @@ class Tricks
     public function setName(string $name): self
     {
         $this->name = $name;
-
+        if ($name) {
+            $this->updatedAt = new \DateTime();
+        }
         return $this;
     }
 
@@ -94,7 +102,9 @@ class Tricks
     public function setContent(?string $content): self
     {
         $this->content = $content;
-
+        if ($content) {
+            $this->updatedAt = new \DateTime();
+        }
         return $this;
     }
 
@@ -106,6 +116,9 @@ class Tricks
     public function setCategory(string $category): self
     {
         $this->category = $category;
+        if ($category) {
+            $this->updatedAt = new \DateTime();
+        }
 
         return $this;
     }
@@ -159,6 +172,37 @@ class Tricks
             // set the owning side to null (unless already changed)
             if ($image->getTricks() === $this) {
                 $image->setTricks(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Image[]
+     */
+    public function getVideos(): Collection
+    {
+        return $this->videos;
+    }
+
+    public function addVideo(Image $video): self
+    {
+        if (!$this->videos->contains($video)) {
+            $this->videos[] = $video;
+            $video->setTricks($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVideo(Image $video): self
+    {
+        if ($this->videos->contains($video)) {
+            $this->videos->removeElement($video);
+            // set the owning side to null (unless already changed)
+            if ($video->getTricks() === $this) {
+                $video->setTricks(null);
             }
         }
 
