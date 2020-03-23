@@ -3,6 +3,7 @@
 namespace App\Controller\Backend;
 
 use App\Service\FileUploader;
+use App\Service\TricksService;
 use App\Entity\Tricks;
 use App\Form\TricksType;
 use App\Repository\TricksRepository;
@@ -23,10 +24,16 @@ class UserTricksController extends AbstractController
      */
     private $entityManager;
 
+    /**
+     * @var TricksService
+     */
+    private $tricksService;
 
-    public function __construct(TricksRepository $repository, ObjectManager $entityManager)
+
+    public function __construct(TricksRepository $repository, ObjectManager $entityManager, TricksService $tricksService)
     {
 
+        $this->tricksService = $tricksService;
         $this->repository = $repository;
         $this->entityManager = $entityManager;
     }
@@ -44,24 +51,17 @@ class UserTricksController extends AbstractController
     /**
      * @Route ("/user/tricks/create", name="user.tricks.new")
      * @param Request $request
-     * @param FileUploader $fileUploader
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      * @throws \Exception
      */
-    public function new(Request $request, FileUploader $fileUploader)
+    public function add(Request $request)
     {
         $tricks = new Tricks();
-
         $form = $this->createForm(TricksType::class, $tricks);
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid())
-        {
 
-            $this->entityManager->persist($tricks);
-            $this->entityManager->flush();
-            $this->addFlash('info', 'Your Tricks have been added, thank you.');
-            $this->addFlash('warning', 'Add your image now !');
-            return $this->redirectToRoute('user.tricks.edit', ['id' => $tricks->getId()]);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->tricksService->addTrick($tricks);
         }
 
         return $this->render('user/tricks/new.html.twig', [
@@ -77,16 +77,13 @@ class UserTricksController extends AbstractController
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function edit(Tricks $tricks, Request $request, FileUploader $fileUploader)
+    public function edit(Tricks $tricks, Request $request)
     {
         $form = $this->createForm(TricksType::class, $tricks);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            $this->entityManager->flush();
-            $this->addFlash('info', 'Your Tricks have been edited, thank you.');
-            return $this->redirectToRoute('user.tricks.index');
+            $this->tricksService->editTrick($tricks);
         }
 
         return $this->render('user/tricks/edit.html.twig', [
@@ -96,17 +93,12 @@ class UserTricksController extends AbstractController
     }
 
     /**
-     * @Route("/user/tricks/{id}", name="user.tricks.delete", methods="DELETE")
+     * @Route("user/tricks/delete/{id}", name="tricks.delete")
      * @param Tricks $tricks
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return void
      */
-    public function delete(Tricks $tricks, Request $request)
+    public function delete(Tricks $tricks)
     {
-        if ($this->isCsrfTokenValid('delete' . $tricks->getId(), $request->get('_token'))) {
-            $this->entityManager->remove($tricks);
-            $this->entityManager->flush();
-            $this->addFlash('info', 'Your Tricks have been deleted');
-        }
-        return $this->redirectToRoute('user.tricks.index');
+        $this->tricksService->deleteTrick($tricks);
     }
 }

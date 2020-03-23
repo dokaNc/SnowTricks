@@ -9,16 +9,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class RegistrationController extends AbstractController
 {
+
     /**
      * @Route("/register", name="app_register")
      * @param Request $request
-     * @param UserPasswordEncoderInterface $passwordEncoder
      * @param \Swift_Mailer $mailer
+     * @param UserPasswordEncoderInterface $passwordEncoder
      * @return Response
      */
     public function register(Request $request, \Swift_Mailer $mailer,UserPasswordEncoderInterface $passwordEncoder): Response
@@ -58,11 +57,9 @@ class RegistrationController extends AbstractController
 
         }
 
-
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
             'current_menu' => 'register'
-
         ]);
     }
 
