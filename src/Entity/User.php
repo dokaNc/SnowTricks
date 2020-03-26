@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -19,6 +21,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     errorPath="username",
  *     message="This username address is already used."
  * )
+ */
+
+/**
+ * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
 class User implements UserInterface
 {
@@ -55,9 +61,16 @@ class User implements UserInterface
      */
     private $createdAt;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $updatedAt;
+
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
     }
 
 
@@ -74,6 +87,9 @@ class User implements UserInterface
     public function setUsername(string $username): self
     {
         $this->username = $username;
+        if ($username) {
+            $this->updatedAt = new \DateTime();
+        }
 
         return $this;
     }
@@ -86,6 +102,9 @@ class User implements UserInterface
     public function setEmail(string $email): self
     {
         $this->email = $email;
+        if ($email) {
+            $this->updatedAt = new \DateTime();
+        }
 
         return $this;
     }
@@ -138,6 +157,18 @@ class User implements UserInterface
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
