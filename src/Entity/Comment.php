@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CommentRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Comment
 {
@@ -17,18 +18,47 @@ class Comment
     private $id;
 
     /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
+    /**
      * @ORM\Column(type="text")
      */
     private $content;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Tricks", inversedBy="comments")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $addDate;
+    private $trick;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="comments")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $author;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
     }
 
     public function getContent(): ?string
@@ -39,18 +69,33 @@ class Comment
     public function setContent(string $content): self
     {
         $this->content = $content;
+        if ($content) {
+            $this->createdAt = new \DateTime();
+        }
 
         return $this;
     }
 
-    public function getAddDate(): ?\DateTimeInterface
+    public function getTrick(): ?Tricks
     {
-        return $this->addDate;
+        return $this->trick;
     }
 
-    public function setAddDate(\DateTimeInterface $addDate): self
+    public function setTrick(?Tricks $trick): self
     {
-        $this->addDate = $addDate;
+        $this->trick = $trick;
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): self
+    {
+        $this->author = $author;
 
         return $this;
     }
