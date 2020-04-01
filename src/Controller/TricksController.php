@@ -72,4 +72,23 @@ class TricksController extends AbstractController
             'current_menu' => 'tricks'
             ]);
     }
+
+    /**
+     * @Route("/tricks/comment/delete/{id}", name="comment.delete")
+     * @param Comment $comment
+     * @param ObjectManager $entityManager
+     * @return Response
+     */
+    public function delete(Comment $comment, ObjectManager $entityManager): Response
+    {
+        $entityManager->remove($comment);
+        $entityManager->flush();
+
+        $this->addFlash(
+            'info',
+            'Your comment has been deleted'
+        );
+
+        return $this->redirectToRoute('tricks.index');
+    }
 }
