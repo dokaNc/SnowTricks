@@ -1,23 +1,12 @@
 {% extends 'base.html.twig' %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="">
+    <link rel="stylesheet" href="{{ asset('css/tricks.css') }}">
 {% endblock %}
 
 {% block title 'Edit tricks' %}
 
-{% block body %}
-    {% for image in tricks.images %}
-        {% if image.mainImage == 1 and image.active == 1 %}
-            <figure class="position-relative">
-                <img class="img-fluid" style="filter: brightness(50%);"
-                     src="/uploads/images/{{ image.image }}" alt=""/>
-                <figcaption>
-                    <h1 class="text-white position-absolute" style="top: 50%; left: 35%">{{ tricks.name }}</h1>
-                </figcaption>
-            </figure>
-        {% endif %}
-    {% endfor %}
+{% block content %}
     <div class="container-fluid">
         {% include 'includes/source.html.twig' %}
         <div class="col-md-12 p-3 shadow-lg">
@@ -73,5 +62,5 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="/js/tricks.js"></script>
+    <script src="{{ asset('js/tricks.js') }}"></script>
 {% endblock %}
