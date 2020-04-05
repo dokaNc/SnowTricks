@@ -7,7 +7,8 @@
 
 ## Download
 
-`git clone https://github.com/kevinmulot/snowtricks.git`  
+`git clone `git clone https://github.com/dokaNc/SnowTricks.git`  
+`  
 
 ## Installation
 ### 1 - Install Composer
