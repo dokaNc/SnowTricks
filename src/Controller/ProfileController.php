@@ -5,10 +5,13 @@ namespace App\Controller;
 
 
 use App\Entity\PasswordUpdate;
+use App\Entity\User;
 use App\Form\AccountType;
 use App\Form\PasswordUpdateType;
+use App\Service\AvatarFileUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,15 +25,25 @@ class ProfileController extends AbstractController
      *
      * @param Request $request
      * @param ObjectManager $entityManager
+     * @param AvatarFileUploader $fileUploader
      * @return Response
      */
-    public function updateProfile(Request $request, ObjectManager $entityManager)
+    public function updateProfile(Request $request, ObjectManager $entityManager, AvatarFileUploader $fileUploader)
     {
+        $user = new User();
+
         $user = $this->getUser();
 
         $form = $this->createForm(AccountType::class, $user);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
+
+            /** @var UploadedFile $avatarFile */
+            $avatarFile = $form['avatar']->getData();
+            if ($avatarFile) {
+                $avatar = $fileUploader->upload($avatarFile);
+                $user->setAvatar($avatar);
+            }
 
             $entityManager->persist($user);
             $entityManager->flush();

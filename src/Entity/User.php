@@ -71,6 +71,11 @@ class User implements UserInterface
      */
     private $comments;
 
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $avatar;
+
 
     public function __construct()
     {
@@ -206,6 +211,18 @@ class User implements UserInterface
                 $comment->setAuthor(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(string $avatar): self
+    {
+        $this->avatar = $avatar;
 
         return $this;
     }

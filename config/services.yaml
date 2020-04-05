@@ -23,6 +23,11 @@ services:
         arguments:
             $targetDirectory: '%kernel.project_dir%/public/uploads/images'
 
+    App\Service\AvatarFileUploader:
+        arguments:
+            $targetDirectory: '%kernel.project_dir%/public/img'
+
+
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
     App\Controller\:

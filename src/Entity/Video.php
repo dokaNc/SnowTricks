@@ -32,7 +32,7 @@ class Video
     private $active;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Tricks", inversedBy="images")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Tricks", inversedBy="videos")
      */
     private $tricks;
 
