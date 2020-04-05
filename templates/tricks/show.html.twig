@@ -12,11 +12,13 @@
     <hr>
 
     <div>
-        {% include 'includes/source.html.twig' %}
+        {% include 'includes/sourceShow.html.twig' %}
     </div>
 
+    <hr>
+
     <div class="container mt-4">
-        <p>Description: {{ tricks.content }}</p>
+        <h3>Description: {{ tricks.content }}</h3>
         <p>Category: {{ tricks.category }}</p>
     </div>
 
@@ -33,7 +35,10 @@
                 </blockquote>
 
                 {% if app.user and app.user == comment.author %}
-                <a href="{{ path('comment.delete', {'id': comment.id}) }}" class="btn btn-danger" style="float: right;">
+
+                    <img src="/img/{{ app.user.avatar }}" class="avatar-mini" alt="Avatar de {{ app.user.username }}" style="width: auto; height: 200px;">
+
+                    <a href="{{ path('comment.delete', {'id': comment.id}) }}" class="btn btn-danger" style="float: right;">
                     <i class="fas fa-trash"></i>
                 </a>
                 {% endif %}

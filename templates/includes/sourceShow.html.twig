@@ -1,0 +1,32 @@
+<div class="container">
+    <div class="card-check hide-media">
+        {% for image in tricks.images %}
+            {% if image.mainImage == 1 and image.active == 1 %}
+                <div class="">
+                    <img class="card-img-top align-self-center" style="filter: brightness(50%);"
+                         src="/uploads/images/{{ image.image }}" alt=""/>
+                    <h1 class="text-white position-absolute" style="top: 50%; left: 35%; text-shadow: 0.1em 0.1em 0.2em black">{{ tricks.name }}</h1>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+
+<input type="checkbox" id="loading-media" name="load_media" class="d-none"/>
+<div class="card-deck hide-media" id="media">
+    {% for image in tricks.images %}
+        {% if image.mainImage == 0 and image.active == 1 %}
+            <div class="card border-0">
+                <img class="mt-3 card-img-top align-self-center" style="max-height: 200px;"
+                     src="/uploads/images/{{ image.image }}"
+                     alt=""/>
+            </div>
+        {% endif %}
+    {% endfor %}
+    {% for video in tricks.videos %}
+        <div class="card border-0">
+            <iframe class="mt-3 card-img-top align-self-center" src="{{ video.url }}"></iframe>
+        </div>
+    {% endfor %}
+</div>
