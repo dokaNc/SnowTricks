@@ -2,7 +2,7 @@
     "name": "dokanc/projet6",
     "version": "0.2.0",
     "type": "project",
-    "description": "Develop from A to Z the SnowTricks Community Site",
+    "description": "Develop from A to Z the SnowTricks Community Site.",
     "license": "MIT",
     "require": {
         "php": "^7.2.5",
