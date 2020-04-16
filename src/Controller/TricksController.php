@@ -73,7 +73,7 @@ class TricksController extends AbstractController
             'tricks' => $tricks,
             'form' => $form->createView(),
             'current_menu' => 'tricks',
-            'idtricks' => $tricks->getId(),
+            'id' => $tricks->getId(),
             'slug' => $tricks->getSlug()
             ]);
     }

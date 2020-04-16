@@ -54,25 +54,27 @@
     <!--END: Form Comment-->
         <hr>
 {% endif %}
+    </div>
+    <!--END: Container-->
 
-
+    <div class="container m-b-35">
         <!--START: Show Comment-->
         {% if tricks.comments|length > 0 %}
-
                      <div class="comments">
                      {% for comment in tricks.comments %}
-
                          <div class="posts_more">
                              <!-- holder -->
                              <div class="holder">
                                  {% if app.user and app.user == comment.author %}
-                                     <a href="{{ path('comment.delete', {'slug': slug, 'idtricks': idtricks, 'id': comment.id}) }}" class="badge-red" style="float: right;">
+                                     <a href="{{ path('comment.delete', {'slug': slug, 'idtricks': id, 'id': comment.id}) }}" class="badge-red" style="float: right;">
                                          <i class="fas fa-trash"></i>
                                      </a>
                                  {% endif %}
                                  <div class="comment-list">
                                      <div class="comment">
-                                         <div class="image"><img alt="" src="/img/{{ app.user.avatar }}" class="avatar"></div>
+                                         <div class="image">
+                                             <img alt="" src="/img/{{ comment.author.avatar }}" class="avatar">
+                                         </div>
                                          <div class="text">
                                              <h5 class="name" style="text-transform: uppercase">{{ comment.author.username }}</h5>
                                              <span class="comment_date">{{ comment.createdAt|date("Y-m-d H:i:s") }}</span>

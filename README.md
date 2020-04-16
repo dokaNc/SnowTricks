@@ -1,3 +1,5 @@
+![alt text](https://i.ibb.co/hLTqz3V/logo-dark.png)
+
 # Project 6 - OpenClassrooms
 **Name of the project :** Développez de A à Z le site communautaire Snow Tricks (Develop from A to Z the SnowTricks Community Site).
 
