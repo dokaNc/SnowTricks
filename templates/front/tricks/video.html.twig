@@ -1,22 +1,29 @@
-{% extends 'base.html.twig' %}
+{% extends 'base/baseNew.html.twig' %}
 
 {% block title 'Add video' %}
 
 {% block content %}
-    <div class="d-flex justify-content-center vh-100 w-100" style="margin-top: 50px">
-        <div class="col-lg-10">
-            <div class="container text-center">
-                <h4>Add video for your Tricks</h4>
-                {{ form_start(formVideo) }}
-                <div class="row p-10">
-                    <div class="col">{{ form_widget(formVideo.url) }}</div>
+
+    <div class="container m-t-30">
+        {% if app.user %}
+        <!--Team members style 2-->
+        <div class="row team-members team-members-card m-b-40">
+
+            <div class="col-md-12">
+                <div class="team-member">
+                    <div class="col-md-12 m-t-30 m-b-25">
+                        <div class="hr-title center m-b-10"><abbr>ADD IMAGE FOR YOUR TRICKS</abbr> </div>
+                        {{ form_start(formVideo) }}
+                        {{ form_widget(formVideo.url) }}
+                        <div hidden>{{ form_widget(formVideo.active) }}</div>
+                        <input type="submit" class="btn btn-default col-md-12" value="Add">
+                        {{ form_end(formVideo) }}
+                    </div>
                 </div>
-                <div class="row p-4">
-                    <div class="btn btn-success col" style="margin-right: 1%">{{ form_widget(formVideo.active) }}</div>
-                    <input type="submit" class="btn btn-primary col-md-8" value="Save">
-                </div>
-                {{ form_end(formVideo) }}
             </div>
+            <!--END: Team members style 2-->
+            {% endif %}
         </div>
     </div>
+
 {% endblock %}

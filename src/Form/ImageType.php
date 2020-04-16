@@ -14,12 +14,22 @@ class ImageType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('image', FileType::class)
+            ->add('image', FileType::class, [
+                'attr' => [
+                    'class' => 'btn btn-light btn-shadow m-b-15',
+                    'style' => 'display: inline;'
+                ],
+            ])
             ->add('mainImage', CheckboxType::class, [
             'required' => false,
             'label' => 'Main Image'
             ])
-            ->add('active', CheckboxType::class, ['required' => false])
+            ->add('active', CheckboxType::class, [
+                'required' => false,
+                'attr' => [
+                    'checked' => 1
+                ],
+            ])
             ;
     }
 

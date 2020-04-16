@@ -11,16 +11,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @UniqueEntity(
- *     fields={"email"},
- *     errorPath="email",
- *     message="This email address is already used."
- * )
- * @UniqueEntity(
- *     fields={"username"},
- *     errorPath="username",
- *     message="This username address is already used."
- * )
  */
 
 /**
@@ -72,7 +62,7 @@ class User implements UserInterface
     private $comments;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     private $avatar;
 

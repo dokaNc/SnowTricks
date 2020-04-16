@@ -1,0 +1,30 @@
+<!-- START: Other Image -->
+<div class="m-t-20" id="media">
+    <div class="container">
+        <div class="row">
+            {% for image in tricks.images %}
+                {% if image.mainImage == 0 and image.active == 1 %}
+                    <div class="col-lg-4" id="media_{{ image.id }}">
+                        <div class="portfolio-item light-bg no-overlay img-zoom pf-illustrations pf-uielements pf-media">
+                            <div class="portfolio-item-wrap" id="tricks">
+                                <div class="portfolio-image">
+                                    <img src="/uploads/images/{{ image.image }}" alt="">
+                                </div>
+                                <div class="portfolio-description">
+                                    <a>
+                                        <div class="text-center">
+                                            <div>
+                                                <a id="deleteMedia_{{ image.id }}" data-url="{{ path('image.delete', {'id': image.id}) }}"><i class="fas fa-trash-alt"></i></a>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<!-- END: Other Image -->

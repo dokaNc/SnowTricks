@@ -1,40 +1,81 @@
-{% extends 'base.html.twig' %}
+{% extends '/base/baseNew.html.twig' %}
 
 {% block title 'Add tricks' %}
 
 {% block content %}
+
+    <!-- Page title -->
+    <section id="page-title" class="page-title-center" style="background-image: url(/images/wp-blue.jpg);">
         <div class="container">
-
-            <h1>Manage tricks</h1>
-
-            <table class="table table-stripped">
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Category</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                {%  for tricks in tricks %}
-                    <tr>
-                        <td>{{ tricks.name }}</td>
-                        <td>{{ tricks.category }}</td>
-                        <td>
-                            <a href="{{ path('user.tricks.edit', {id: tricks.id}) }}" class="btn btn-secondary">Edit</a>
-                            <form method="post" action="{{ path('tricks.delete', {id: tricks.id}) }}" style="display: inline-block" onsubmit="return confirm('Are you sure to delete this Tricks ?')">
-                                <input type="hidden" name="_method" value="DELETE">
-                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tricks.id) }}">
-                                <button class="btn btn-danger">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-
-            <div class="text-right">
-                <a class="btn btn-primary" href="{{ path('user.tricks.new') }}">Create Tricks</a>
+            <div class="page-title">
+                <h1 class="text-shadow-dark">Manage Tricks</h1>
             </div>
         </div>
+    </section>
+    <!-- end: Page title -->
+
+    <!-- Page Menu -->
+    <div class="page-menu menu-outline style1">
+    </div>
+    <!-- end: Page Menu -->
+
+        <div class="container-fluid m-t-35">
+                        <table class="table table-hover" style="text-align: center;">
+
+                            <thead>
+                            <tr>
+                                <th style="text-align: center;">Name</th>
+                                <th style="text-align: center;">Category</th>
+                                <th style="text-align: center;">Main Image</th>
+                                <th style="text-align: center;">Creation Date</th>
+                                <th style="text-align: center;">Update Date</th>
+                                <th style="text-align: center;">Actions</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            {%  for tricks in tricks %}
+                                <tr id="media_{{ tricks.id }}">
+                                    <td>{{ tricks.name }}</td>
+                                    <td>
+                                        <span class="badge-coral">{{ tricks.category }}</span>
+                                    </td>
+                                    <td>
+                                        {% for image in tricks.images %}
+                                        {% if image.mainImage == 1 and image.active == 1 %}
+                                            <img class="card-img-top align-self-center avatar-mini"
+                                                 src="/uploads/images/{{ image.image }}"
+                                                 alt=""/>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        <span class="badge-mediumseagreen">{{ tricks.createdAt|date("d/m/Y H:i:s") }} </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge-green">{{ tricks.updatedAt|date("d/m/Y H:i:s") }} </span>
+                                    </td>
+                                    <td>
+                                        <a href="{{ path('tricks.show', {id: tricks.id, slug: tricks.slug}) }}" class="badge-grey-black"><i class="fas fa-eye"></i></a>
+                                        <a href="{{ path('user.tricks.edit', {id: tricks.id}) }}" class="badge-blue" ><i class="fas fa-pencil-alt"></i></a>
+                                        <a href="#" id="deleteMedia_{{ tricks.id }}" data-url="{{ path('tricks.delete', {'id': tricks.id}) }}" class="badge-red"><i class="fas fa-trash-alt"></i></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+
+                        </table>
+                </div>
+
+    <hr>
+
+        <div class="container m-b-35">
+            <div class="text-center">
+                <a class="btn btn-default" href="{{ path('user.tricks.new') }}">Create Tricks</a>
+            </div>
+        </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/tricks.js') }}"></script>
 {% endblock %}

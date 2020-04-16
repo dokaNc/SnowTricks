@@ -1,11 +1,70 @@
-{% extends 'base.html.twig' %}
+{% extends '/base/baseNew.html.twig' %}
 
-{% block title 'Tricks' %}
+{% block title 'SnowTricks' %}
 
 {% block content %}
-    <div class="jumbotron text-center">
+    <!-- Page title -->
+    <section id="page-title" class="page-title-center" style="background-image: url(/images/wallpaper.jpg);">
+        <div class="container">
+            <div class="page-title">
+                <h1>List Of Tricks</h1>
+            </div>
+        </div>
+    </section>
+    <!-- end: Page title -->
 
-        <h1>List of the Tricks</h1>
-
+    <!-- Page Menu -->
+    <div class="page-menu menu-outline style1">
     </div>
+    <!-- end: Page Menu -->
+
+    <section id="page-content">
+        <div class="row">
+            <div id="tricklist" class="container">
+                {%  for tricks in tricks %}
+                    <div class="box col-lg-4" id="media_{{ tricks.id }}">
+                        <div class="portfolio-item light-bg no-overlay img-zoom pf-illustrations pf-uielements pf-media">
+                            <div class="portfolio-item-wrap" id="tricks">
+                                {% for image in tricks.images %}
+                                    {% if image.mainImage == 1 and image.active == 1 %}
+                                        <div class="portfolio-image">
+                                            <a href="{{ path('tricks.show', {id: tricks.id, slug: tricks.slug}) }}"><img src="/uploads/images/{{ image.image }}" alt=""></a>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                                <div class="portfolio-description">
+                                    <a>
+                                        <div class="text-center">
+                                            <div>
+                                                {% if app.user.id is defined %}
+                                                    <a href="{{ path('user.tricks.edit', {id: tricks.id}) }}">
+                                                        <i class="fas fa-pencil-alt"></i>
+                                                    </a>
+                                                    <a id="deleteMedia_{{ tricks.id }}" data-url="{{ path('tricks.delete', {'id': tricks.id}) }}">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </a>
+                                                {% endif %}
+                                            </div>
+
+                                            <div>
+                                                <a href="{{ path('tricks.show', {id: tricks.id, slug: tricks.slug}) }}">
+                                                    <h3>{{ tricks.name }}</h3>
+                                                    <span>{{ tricks.category }}</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/tricks.js') }}"></script>
 {% endblock %}

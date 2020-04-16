@@ -50,10 +50,9 @@ class TricksService extends AbstractController
         $this->entityManager->persist($tricks);
         $this->entityManager->flush();
 
-        $this->addFlash('info', 'Your Tricks have been added, thank you.');
-        $this->addFlash('warning', 'Add your image now !');
-
-        $response = new RedirectResponse($this->router->generate('user.tricks.edit', ['id' => $tricks->getId()]));
+        $response = new RedirectResponse($this->router->generate('user.tricks.edit', [
+            'id' => $tricks->getId()
+        ]));
         return $response->send();
     }
 
@@ -63,7 +62,10 @@ class TricksService extends AbstractController
 
         $this->addFlash('info', 'Tricks N°' . $tricks->getId() . ' edited');
 
-        $response = new RedirectResponse($this->router->generate('user.tricks.index', ['id' => $tricks->getId(), 'slug' => $tricks->getSlug()]));
+        $response = new RedirectResponse($this->router->generate('user.tricks.index', [
+            'id' => $tricks->getId(),
+            'slug' => $tricks->getSlug()
+        ]));
         return $response->send();
     }
 
@@ -92,14 +94,17 @@ class TricksService extends AbstractController
 
         $this->addFlash('warning', 'Your tricks is deleted');
 
-        $response = new RedirectResponse($this->router->generate('app_home'));
+        $response = new RedirectResponse($this->router->generate('user.tricks.index'));
         return $response->send();
     }
 
     public function checkSlug(Tricks $tricks, $slug)
     {
         if ($tricks->getSlug() !== $slug) {
-            $response = new RedirectResponse($this->router->generate('user.tricks.index', ['id' => $tricks->getId(), 'slug' => $tricks->getSlug(),]));
+            $response = new RedirectResponse($this->router->generate('user.tricks.index', [
+                'id' => $tricks->getId(),
+                'slug' => $tricks->getSlug(),
+                ]));
             return $response->send();
         }
     }

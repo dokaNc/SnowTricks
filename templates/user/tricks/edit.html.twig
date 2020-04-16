@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends '/base/baseNew.html.twig' %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('css/tricks.css') }}">
@@ -7,60 +7,69 @@
 {% block title 'Edit tricks' %}
 
 {% block content %}
-    <div class="container-fluid">
-        {% include 'includes/source.html.twig' %}
-        <div class="col-md-12 p-3 shadow-lg">
-            <div class="container">
-                {% include 'includes/flashMessage.html.twig' %}
-                {{ form_start(form) }}
-                <div class="p-3">
-                    <div class="form-group row">
-                        <label for="staticEmail" class="col-sm-2 col-form-label">{{ form_label(form.name) }}</label>
-                        <div class="col-sm-10">
-                            {{ form_widget(form.name) }}
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="staticEmail"
-                               class="col-sm-2 col-form-label">{{ form_label(form.content) }}</label>
-                        <div class="col-sm-10">
-                            {{ form_widget(form.content) }}
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="staticEmail"
-                               class="col-sm-2 col-form-label">{{ form_label(form.category) }}</label>
-                        <div class="col-sm-10">
-                            {{ form_widget(form.category) }}
-                        </div>
-                    </div>
-                    <p>{{ form_rest(form) }}</p>
-                </div>
-                <div class="container">
-                    <div class="float-left">
-                        <input class="btn btn-primary" type="submit" value="Save">
-                        {% if app.user.id is defined %}
-                            <a class="btn btn-danger delete" href="{{ path('tricks.delete', {'id': tricks.id}) }}"><i
-                                        class="fa fa-trash"></i> Delete</a>
-                        {% endif %}
-                    </div>
-                    <div class="float-right">
-                        <a href="{{ path('image.add', {'tricks': tricks.id}) }}" class="btn btn-default border shadow">Add image</a>
-                        <a href="{{ path('video.add', {'tricks': tricks.id}) }}" class="btn btn-default border shadow">Add video</a>
-                    </div>
-                </div>
-                <p class="text-center">
-                    <a class="badge badge-primary">Created on {{ tricks.createdAt|date("d/m/Y H:i:s") }} </a>
-                    <a class="badge badge-primary">Updated on {{ tricks.updatedAt|date("d/m/Y H:i:s") }} </a>
 
-                <div class="mb-5"></div>
-                {{ form_end(form) }}
-                <hr/>
+<div class="wrapper">
+    <!-- Page title -->
+    <section id="page-title" class="page-title-center" style="background-image: url(/images/wp-blue.jpg);">
+        <div class="container">
+            <div class="page-title">
+                <h1 class="text-shadow-dark">Edit Tricks</h1>
             </div>
         </div>
+    </section>
+    <!-- end: Page title -->
+
+    <!-- Page Menu -->
+    <div class="page-menu menu-outline style1">
     </div>
+    <!-- end: Page Menu -->
+
+    {% include '/includes/source.html.twig' %}
+
+    <!-- START: Form -->
+    {{ form_start(form) }}
+            <div class="container">
+                <div class="form-group">
+                        {{ form_label(form.name) }}
+                        {{ form_widget(form.name) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(form.content) }}
+                        {{ form_widget(form.content) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(form.category) }}
+                        {{ form_widget(form.category) }}
+                    </div>
+                <!-- START: Button & Badge -->
+                <div class="m-b-30">
+                    <div class="m-b-25">
+                        <div class="float-left">
+                            {% if app.user.id is defined %}
+                                <input class="btn btn-default border shadow" type="submit" value="Save">
+                                <a class="btn btn-danger delete border shadow" href="{{ path('tricks.delete', {'id': tricks.id}) }}">Delete</a>
+                            {% endif %}
+                        </div>
+
+                        <div class="float-right">
+                            <a href="{{ path('image.add', {'tricks': tricks.id}) }}" class="btn btn-warning border shadow">Add image</a>
+                            <a href="{{ path('video.add', {'tricks': tricks.id}) }}" class="btn btn-warning border shadow">Add video</a>
+                        </div>
+
+                        <div class="text-center">
+                            <span class="badge-green">Created on {{ tricks.createdAt|date("d/m/Y H:i:s") }} </span>
+                            <br>
+                            <span class="badge-mediumseagreen">Updated on {{ tricks.updatedAt|date("d/m/Y H:i:s") }} </span>
+                        </div>
+                    </div>
+                </div>
+      <!-- END: Button & Badge -->
+            </div>
+    <!-- END: Form -->
+</div>
+{{ form_end(form) }}
 {% endblock %}
 
 {% block javascripts %}
-    <script src="{{ asset('js/tricks.js') }}"></script>
+    <script src="/js/tricks.js"></script>
 {% endblock %}
