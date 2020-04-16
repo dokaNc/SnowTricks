@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends '/base/baseNew.html.twig' %}
 
 {% block title 'Edit tricks' %}
 
@@ -6,59 +6,26 @@
 
 {% block content %}
 
-    <div class="container mt-4">
-        <h2>Create Tricks</h2>
-        {{ include ('user/tricks/_form.html.twig', {button: 'Create'}) }}
-    </div>
-
-{% endblock %}
-
-{% block _tricks_images_entry_row %}
-    {{ form_widget(form) }}
-{% endblock %}
-
-{% block _tricks_images_widget %}
-    <p>Vous pouvez ajouter votre propre image</p>
-    {{ form_widget(form) }}
-
-    <div class="form-group">
-        <button type="button" id="add-image" class="btn btn-primary">Ajouter une image</button>
-    </div>
-{%  endblock %}
-
-{% block _tricks_images_entry_widget %}
-    <div class="form-group" id="block_{{ id }}">
-        <div class="row">
-            <div class="col-5">
-                {{ form_widget(form.image) }}
-            </div>
-
-            <div class="col-1">
-                <button type="button" data-action="delete" data-target="#block_{{id}}" class="btn btn-danger">X</button>
+    <!-- Page title -->
+    <section id="page-title" class="page-title-center" style="background-image: url(/images/wallpaper.jpg);">
+        <div class="container">
+            <div class="page-title">
+                <h1>Create Tricks</h1>
             </div>
         </div>
+    </section>
+    <!-- end: Page title -->
+
+    <!-- Page Menu -->
+    <div class="page-menu menu-outline style1">
     </div>
-{% endblock %}
+    <!-- end: Page Menu -->
 
-{% block javascripts %}
-    <script>
-        $('#add-image').click(function(){
-            const index = $('#tricks_images div.form-group').lenght;
+    <div class="container m-t-30 m-b-40">
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button type="submit" class="btn btn-icon-holder">Create<i class="fa fa-plus"></i></button>
+        {{ form_end(form) }}
+    </div>
 
-            const tmpl = $('#tricks_images').data('prototype').replace(/__name__/g, index);
-
-            $('#tricks_images').append(tmpl);
-
-            handleDeleteButtons();
-        });
-
-        function handleDeleteButtons() {
-            $('button[data-action="delete"]').click(function(){
-                const target = this.dataset.target
-                $(target).remove();
-            });
-        }
-
-        handleDeleteButtons();
-    </script>
 {% endblock %}

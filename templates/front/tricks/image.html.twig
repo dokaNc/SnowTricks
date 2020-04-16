@@ -1,23 +1,31 @@
-{% extends 'base.html.twig' %}
+{% extends 'base/baseNew.html.twig' %}
 
 {% block title 'Add image' %}
 
 {% block content %}
-    <div class="d-flex justify-content-center vh-100 w-100" style="margin-top: 50px">
-        <div class="col-lg-10">
-            <div class="container text-center">
-                <h4>Add image for your Tricks</h4>
-                {{ form_start(formImage) }}
-                <div class="row p-10">
-                    <div class="col">{{ form_widget(formImage.image) }}</div>
+
+    <div class="container m-t-30">
+        {% if app.user %}
+        <!--Team members style 2-->
+        <div class="row team-members team-members-card m-b-40">
+
+            <div class="col-md-12">
+                <div class="team-member">
+                    <div class="col-md-12 m-t-30 m-b-25">
+                        <div class="hr-title center m-b-10"><abbr>ADD IMAGE FOR YOUR TRICKS</abbr> </div>
+                        {{ form_start(formImage) }}
+                            <div class="float-left col-md-12">{{ form_widget(formImage.image) }}</div>
+                            <div class="badge badge-mediumseagreen m-b-5">{{ form_widget(formImage.mainImage) }}</div>
+
+                            <div hidden>{{ form_widget(formImage.active) }}</div>
+                            <input type="submit" class="btn btn-default col-md-12" value="Add">
+                        {{ form_end(formImage) }}
+                    </div>
                 </div>
-                <div class="row p-4">
-                    <div class="btn btn-success col" style="margin-right: 1%">{{ form_widget(formImage.mainImage) }}</div>
-                    <div class="btn btn-success col" style="margin-right: 1%">{{ form_widget(formImage.active) }}</div>
-                    <input type="submit" class="btn btn-primary col-md-8" value="Save">
-                </div>
-                {{ form_end(formImage) }}
             </div>
+            <!--END: Team members style 2-->
+            {% endif %}
         </div>
     </div>
+
 {% endblock %}

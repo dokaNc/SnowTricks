@@ -1,47 +1,105 @@
-<div class="container">
-    <div class="card-check hide-media">
-        {% for image in tricks.images %}
-            {% if image.mainImage == 1 and image.active == 1 %}
-                <div class="">
-                    <img class="card-img-top align-self-center" style="filter: brightness(50%);"
-                         src="/uploads/images/{{ image.image }}" alt=""/>
-                    <h1 class="text-white position-absolute" style="top: 50%; left: 35%; text-shadow: 0.1em 0.1em 0.2em black">{{ tricks.name }}</h1>
-                    <div class="card-body align-self-center">
-                        <button type="button" class="btn text-danger shadow" id="deleteMedia_{{ image.id }}" href="{{ path('image.delete', {'id': image.id}) }}"
-                                data-url="{{ path('image.delete', {'id': image.id}) }}"><i
-                                    class="fa fa-trash"></i></button>
+<!-- START: Main Image -->
+<div class="m-t-20" id="media">
+    <div class="container">
+        <div class="row">
+            {% for image in tricks.images %}
+                {% if image.mainImage == 1 and image.active == 1 %}
+                    <div class="col-lg-12" id="media_{{ image.id }}">
+                        <div class="portfolio-item light-bg no-overlay img-zoom pf-illustrations pf-uielements pf-media">
+                            <div class="portfolio-item-wrap" id="tricks">
+
+                                   <div class="overlay-image _bo">
+                                       <a>
+                                           <div class="portfolio-wrap">
+                                               <img src="/uploads/images/{{ image.image }}" alt="Main Image Tricks" width="100%">
+                                           </div>
+                                           <div class="text_test _q">{{ tricks.name }}</div>
+                                       </a>
+                                   </div>
+
+                                {% if app.user.id is defined %}
+                                <div class="portfolio-description">
+                                    <a>
+                                        <div class="text-center">
+                                            <div>
+                                                <a id="deleteMedia_{{ image.id }}" data-url="{{ path('image.delete', {'id': image.id}) }}"><i class="fas fa-trash-alt"></i></a>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                {% endif %}
+
+                            </div>
+                        </div>
                     </div>
-                </div>
-            {% endif %}
-        {% endfor %}
+                {% endif %}
+            {% endfor %}
+        </div>
     </div>
 </div>
+<!-- END: Main Image -->
 
+<!-- START: Other Image -->
+<div class="m-t-20" id="media">
+    <div class="container">
+        <div class="row">
+            {% for image in tricks.images %}
+                {% if image.mainImage == 0 and image.active == 1 %}
+                    <div class="col-lg-3" id="media_{{ image.id }}">
+                        <div class="portfolio-item light-bg no-overlay img-zoom pf-illustrations pf-uielements pf-media">
+                            <div class="portfolio-item-wrap" id="tricks">
+                                <div class="portfolio-image">
+                                    <img src="/uploads/images/{{ image.image }}" alt="Images Tricks">
+                                </div>
 
-<input type="checkbox" id="loading-media" name="load_media" class="d-none"/>
-<div class="card-deck hide-media" id="media">
-        {% for image in tricks.images %}
-            {% if image.mainImage == 0 and image.active == 1 %}
-                <div class="card border-0">
-                    <img class="card-img-top align-self-center" style="max-height: 200px;"
-                         src="/uploads/images/{{ image.image }}"
-                         alt=""/>
-                    <div class="card-body align-self-center">
-                        <button type="button" class="btn text-danger shadow" id="deleteMedia_{{ image.id }}" href="{{ path('image.delete', {'id': image.id}) }}"
-                                data-url="{{ path('image.delete', {'id': image.id}) }}"><i
-                                    class="fa fa-trash"></i></button>
+                                {% if app.user.id is defined %}
+                                <div class="portfolio-description">
+                                    <a>
+                                        <div class="text-center">
+                                            <div>
+                                                <a id="deleteMedia_{{ image.id }}" data-url="{{ path('image.delete', {'id': image.id}) }}"><i class="fas fa-trash-alt"></i></a>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                {% endif %}
+
+                            </div>
+                        </div>
                     </div>
-                </div>
-            {% endif %}
-        {% endfor %}
-        {% for video in tricks.videos %}
-            <div class="card border-0">
-                <iframe class="card-img-top align-self-center" src="{{ video.url }}"></iframe>
-                <div class="card-body align-self-center">
-                    <button type="button" class="btn text-danger shadow" href="{{ path('video.delete', {'id': video.id}) }}"
-                            id="deleteMedia_{{ video.id }}" data-url="{{ path('video.delete', {'id': video.id}) }}"><i
-                                class="fa fa-trash"></i></button>
-                </div>
-            </div>
-        {% endfor %}
+                {% endif %}
+            {% endfor %}
+<!-- END: Other Image -->
+
+<!-- START: Video -->
+            {% for video in tricks.videos %}
+                    <div class="col-lg-3" id="mediavideo_{{ video.id }}">
+                        <div class="portfolio-item light-bg no-overlay img-zoom pf-illustrations pf-uielements pf-media">
+                            <div class="portfolio-item-wrap" id="tricks">
+
+                                <div class="post-video">
+                                    <iframe width="560" height="315" src="{{ video.url }}" frameborder="0" allowfullscreen></iframe>
+                                </div>
+
+                                {% if app.user.id is defined %}
+                                <div class="portfolio-description">
+                                    <a>
+                                        <div class="text-center">
+                                            <div>
+                                                <a id="deleteMediaVideo_{{ video.id }}" data-url="{{ path('video.delete', {'id': video.id}) }}">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                {% endif %}
+
+                            </div>
+                        </div>
+                    </div>
+            {% endfor %}
+<!-- END: Video -->
+        </div>
     </div>
+</div>

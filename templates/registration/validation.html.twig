@@ -1,15 +1,14 @@
-{% extends 'base.html.twig' %}
+{% extends '/base/baseNew.html.twig' %}
 
 {% block title %}Register Validation{% endblock %}
 
 {% block content %}
-    <div class="container">
-        <h1 class="h3 mb-3 font-weight-normal">Register Validation</h1>
+    <div class="container text-center m-b-30 m-t-30">
+        <h1 class="h1 text-bold mb-3 font-weight-normal">Register Validation</h1>
         {% if error %}
-            Erreur de validation email.
+            <h4 style="color: red">Your link has expired.</h4>
         {% else %}
-            User validé avec succès.
+            <h4 style="color: green">Your account has been validated.</h4>
         {% endif %}
-
     </div>
 {% endblock %}

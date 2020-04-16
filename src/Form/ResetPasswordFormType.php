@@ -26,11 +26,14 @@ class ResetPasswordFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('username', TextType::class, ['required' => true])
             ->add('plainPassword', PasswordType::class, [
-                'label' => 'Password',
+                'label' => false,
                 'mapped' => false,
                 'required' => true,
+                'attr' => [
+                    'placeholder' => 'Password',
+                    'class' => 'input-field'
+                ],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter a password',
@@ -44,7 +47,11 @@ class ResetPasswordFormType extends AbstractType
                 ],
             ])
             ->add('token', HiddenType::class, ['data' => '{{ token }}'])
-            ->add('reset', SubmitType::class);
+            ->add('reset', SubmitType::class, [
+                'attr' => [
+                    'class' => 'btn btn-default'
+                ]
+            ]);
     }
 
     /**

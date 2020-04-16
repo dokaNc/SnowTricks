@@ -1,6 +1,10 @@
 $(document).ready(function () {
-    $(document).on('click', '[id^="deleteMedia_"]', function () {
-        sweetAlert('confirm', "Are you sure you want to delete this ?", $(this).data('url'))
+    $(document).on('click', '[id^="deleteMedia_"]', function (event) {
+        sweetAlert('confirm', "Are you sure you want to delete this ?", { url: $(this).data('url'), elementId: $(this)[0].id })
+    });
+
+    $(document).on('click', '[id^="deleteMediaVideo_"]', function (event) {
+        sweetAlert('confirm', "Are you sure you want to delete this ?", { url: $(this).data('url'), elementId: $(this)[0].id })
     });
 
     $('.delete').on('click', function () {
@@ -33,26 +37,36 @@ $(document).ready(function () {
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
-                    console.log(result);
                     if (result.value) {
-                        ajaxDeleteElement(dataUrl);
+                        if(dataUrl.url) {
+                            ajaxDeleteElement(dataUrl.url, dataUrl.elementId);
+                        } else {
+                            ajaxDeleteElement(dataUrl, null);
+                        }
                     }
                 });
                 break;
         }
     }
 
-    function ajaxDeleteElement(dataUrl) {
+    function ajaxDeleteElement(dataUrl, elementId) {
         $.ajax({
             type: 'GET',
             url: dataUrl,
             success: function (data) {
-                if (data === 'ok') {
+                if(dataUrl && elementId) {
+                    if(elementId.includes('deleteMediaVideo_')) {
+                        elementId = '#mediavideo_' + elementId.replace(/\D+/, '');
+                    } else {
+                        elementId = '#media_' + elementId.replace(/\D+/, '');
+                    }
+                    $(elementId).remove();
+                }
+                if (data) {
                     Swal.fire({
                         icon: 'success',
                         title: 'Deleted!',
                     });
-                    $("#media").load(" #media");
                 } else {
                     Swal.fire({
                         icon: 'danger',

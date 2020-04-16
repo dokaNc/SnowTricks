@@ -20,7 +20,11 @@ class VideoType extends AbstractType
                 ]
             ])
             ->add('active', CheckboxType::class, [
-                'required' => false])
+                'required' => false,
+                'attr' => [
+                    'checked' => 1
+                ],
+            ])
         ;
     }
 

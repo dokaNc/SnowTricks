@@ -12,11 +12,11 @@ class PasswordUpdateType extends ApplicationType
     {
         $builder
             ->add('oldPassword', PasswordType::class,
-                $this->getConfiguration("Ancien mot de passe", "Donnez votre mot de passe actuel..."))
+                $this->getConfiguration("Older password", "Enter your current password..."))
             ->add('newPassword', PasswordType::class,
-                $this->getConfiguration("Nouveau mot de passe", "Donnez votre nouveau mot de passe..."))
+                $this->getConfiguration("New password", "Enter your new password..."))
             ->add('confirmPassword', PasswordType::class,
-                $this->getConfiguration("Confirmation mot de passe", "Confirmez votre nouveau mdp..."))
+                $this->getConfiguration("Confirmation of password", "Confirm your new password..."))
         ;
     }
 

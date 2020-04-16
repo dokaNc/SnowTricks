@@ -1,0 +1,88 @@
+<!-- Header -->
+<header id="header" class="header-fullwidth header-transparent dark">
+    <div id="header-wrap" style="background-color: #252525;">
+        <div class="container">
+            <!--Logo-->
+            <div id="logo">
+                <a href="{{ path('app_home') }}" class="logo" data-dark-logo="/images/logo.png">
+                    <img src="/images/logo.png" alt="SnowTricks Logo">
+                </a>
+            </div>
+            <!--End: Logo-->
+            <!--Top Search Form-->
+            <div id="top-search">
+                <form action="search-results-page.html" method="get">
+                    <input type="text" name="q" class="form-control" value="" placeholder="Start typing & press  &quot;Enter&quot;">
+                </form>
+            </div>
+            <!--end: Top Search Form-->
+
+            <!--Navigation Resposnive Trigger-->
+            <div id="mainMenu-trigger">
+                <button class="lines-button x"> <span class="lines"></span> </button>
+            </div>
+            <!--end: Navigation Resposnive Trigger-->
+
+            <!--Navigation-->
+            <div id="mainMenu" class="menu-creative">
+                <div class="container">
+                    <nav>
+                        <ul>
+                            <!-- menu nav-bar if user is not login -->
+                            <li class="{% if current_menu is defined and current_menu == 'home' %}current{% endif %}">
+                                <a href="{{ path('app_home') }}">Home</a>
+                            </li>
+
+                            <li class="{% if current_menu is defined and current_menu == 'tricks' %}current{% endif %}">
+                                <a href="{{ path('tricks.index') }}">Tricks</a>
+                            </li>
+
+                            <!-- menu nav-bar if user is login -->
+                            {% if app.user %}
+                                <li class="dropdown"><a href="{{ path('account_profile') }}">welcome {{ app.user.username }}</a>
+                                    <ul class="dropdown-menu">
+                                        <li class="dropdown">
+                                            <a href="{{ path('account_profile') }}">
+                                                <i class="fas fa-user-tie"></i>Profile
+                                            </a>
+                                        </li>
+
+                                        <li class="dropdown">
+                                            <a href="{{ path('user.tricks.new') }}">
+                                                <i class="fas fa-plus"></i>Create Tricks
+                                            </a>
+                                        </li>
+
+                                        <li class="dropdown">
+                                            <a href="{{ path('user.tricks.index') }}">
+                                                <i class="fas fa-cogs"></i>Manage Tricks
+                                            </a>
+                                        </li>
+
+                                        <li class="dropdown">
+                                            <a href="{{ path('app_logout') }}">
+                                                <i class="fas fa-sign-out-alt"></i>Logout
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                            {% else %}
+                                <!-- menu nav-bar if user is not login -->
+                                <li class="{% if current_menu is defined and current_menu == 'register' %}current{% endif %}">
+                                    <a href="{{ path('app_register') }}">Sign up</a>
+                                </li>
+
+                                <li class="{% if current_menu is defined and current_menu == 'login' %}current{% endif %}">
+                                    <a href="{{ path('app_login') }}">Sign in</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <!--end: Navigation-->
+        </div>
+    </div>
+</header>
+<!-- end: Header -->

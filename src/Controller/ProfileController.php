@@ -49,7 +49,7 @@ class ProfileController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash(
-                'info',
+                'success',
                 "Your profile has been updated."
             );
         }
@@ -91,7 +91,7 @@ class ProfileController extends AbstractController
                 $entityManager->persist($user);
                 $entityManager->flush();
 
-                $this->addFlash('info', 'Your password has been updated');
+                $this->addFlash('success', 'Your password has been updated');
 
                 return $this->redirectToRoute('account_profile');
             }

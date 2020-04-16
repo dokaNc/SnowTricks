@@ -1,28 +1,56 @@
-{% extends 'base.html.twig' %}
+{% extends 'base/baseNew.html.twig' %}
 
 {% block title 'My account' %}
 
 {% block content %}
 
-    <div class="container">
-        <h1>Edit profile</h1>
+                    <div class="container m-t-30">
+                        {% if app.user %}
+                        <!--Team members style 2-->
+                        <div class="row team-members team-members-card m-b-40">
 
-        {% if app.user %}
-            <h2>Your avatar</h2>
-            <img src="/img/{{ app.user.avatar }}" class="" alt="Avatar de {{ app.user.username }}" style="width: auto; height: 200px;">
-        {% endif %}
+                            <div class="col-md-3">
+                                <div class="team-member">
 
-        {{ form_start(form) }}
-        {{ form_widget(form) }}
+                                    <div class="team-image" style="margin-bottom: 0px">
+                                        <div class="overlay-image _bo">
+                                            <a>
+                                                <div class="portfolio-wrap">
+                                                    <img src="/img/{{ app.user.avatar }}" alt="Main Image Tricks" width="100%">
+                                                </div>
+                                                <div class="text_test _q" style="font-size: 26px;">{{ app.user.username }}</div>
+                                            </a>
+                                        </div>
+                                    </div>
 
-        <button class="btn btn-danger"><a href="{{ path('account_password') }}" style="color: white;">Change your password</a></button>
+                                    <div class="team-desc col-md-12">
+                                        <a href="{{ path('account_profile') }}" style="font-weight: bold">
+                                            <i class="fas fa-user-tie"></i> Edit Profile
+                                        </a>
 
+                                        <hr>
 
-        <div class="float-right">
-        <button type="submit" class="btn btn-primary">Save</button>
-        </div>
+                                        <a href="{{ path('account_password') }}" style="font-weight: bold">
+                                            <i class="fas fa-unlock-alt"></i> Change Password
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
 
-        {{ form_end(form) }}
-    </div>
+                            <div class="col-md-9">
+                                <div class="team-member">
+                                    <div class="col-md-12  m-t-15">
+                                        <div class="hr-title center m-t-10 m-b-30"><abbr>EDIT YOUR PROFILE : {{ app.user.username }}</abbr> </div>
+                                        {{ form_start(form) }}
+                                        {{ form_widget(form) }}
+                                        <button type="submit" class="btn btn-default m-b-30">Save</button>
+                                        {{ form_end(form) }}
+                                    </div>
+                                </div>
+                            </div>
+                        <!--END: Team members style 2-->
+                     {% endif %}
+                </div>
+                </div>
 
 {% endblock %}

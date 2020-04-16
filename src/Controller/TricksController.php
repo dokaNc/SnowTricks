@@ -22,11 +22,14 @@ class TricksController extends AbstractController
 
     /**
      * @Route("/tricks", name="tricks.index")
+     * @param TricksRepository $repository
      * @return Response
      */
-    public function index(): Response
+    public function index(TricksRepository $repository): Response
     {
+        $tricks = $repository->findLatest();
         return $this->render('tricks/index.html.twig' , [
+            'tricks' => $tricks,
             'current_menu' => 'tricks'
             ]);
     }
@@ -55,8 +58,8 @@ class TricksController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash(
-                'info',
-                "Your comment accepted"
+                'success',
+                "Your comment has been added"
             );
         }
 
@@ -69,26 +72,40 @@ class TricksController extends AbstractController
         return $this->render('tricks/show.html.twig', [
             'tricks' => $tricks,
             'form' => $form->createView(),
-            'current_menu' => 'tricks'
+            'current_menu' => 'tricks',
+            'idtricks' => $tricks->getId(),
+            'slug' => $tricks->getSlug()
             ]);
     }
 
     /**
-     * @Route("/tricks/comment/delete/{id}", name="comment.delete")
+     * @Route("/tricks/comment/delete/{slug}-{idtricks}/{id}", name="comment.delete")
      * @param Comment $comment
+     * @param string $slug
+     * @param string $idtricks
      * @param ObjectManager $entityManager
      * @return Response
      */
-    public function delete(Comment $comment, ObjectManager $entityManager): Response
+    public function delete(Request $request, Comment $comment, ObjectManager $entityManager, string $slug, string $idtricks): Response
     {
         $entityManager->remove($comment);
         $entityManager->flush();
 
         $this->addFlash(
-            'info',
+            'success',
             'Your comment has been deleted'
         );
 
-        return $this->redirectToRoute('tricks.index');
+        //var_dump($request->query->get('slug'));
+       // exit();
+        //return $this->redirectToRoute('tricks.show', [
+        //    'id'   => $tricks->getId(),
+        //    'slug' => $tricks->getSlug()
+        //], 301);
+
+        return $this->redirectToRoute('tricks.show', [
+            'slug' => $slug,
+            'id' => $idtricks
+        ]);
     }
 }

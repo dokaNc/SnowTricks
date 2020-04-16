@@ -21,15 +21,17 @@ class RegistrationFormType extends AbstractType
     {
         $builder
             ->add('username', TextType::class, [
-                'label' => 'Username',
+                'label' => false,
                 'attr' => [
-                    'placeholder' => 'Username'
+                    'placeholder' => 'Username',
+                    'class' => 'input-field'
                 ]
             ])
             ->add('email', TextType::class, [
-                'label' => 'Email',
+                'label' => false,
                 'attr' => [
-                    'placeholder' => 'Email'
+                    'placeholder' => 'Email',
+                    'class' => 'input-field'
                 ],
                 'constraints' => [
                     new NotBlank([
@@ -37,20 +39,14 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('agreeTerms', CheckboxType::class, [
-                'mapped' => false,
-                'constraints' => [
-                    new IsTrue([
-                        'message' => 'You should agree to our terms.',
-                    ]),
-                ],
-            ])
+
             ->add('plainPassword', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
-                'label' => 'Password',
+                'label' => false,
                 'attr' => [
-                    'placeholder' => 'Password'
+                    'placeholder' => 'Password',
+                    'class' => 'input-field'
                 ],
                 'mapped' => false,
                 'constraints' => [
@@ -66,6 +62,9 @@ class RegistrationFormType extends AbstractType
                 ],
             ])
             ->add('sendMail', SubmitType::class, [
+                'attr' => [
+                    'class' => 'btn btn-default'
+                ],
                 'label' => 'Register'
             ]);
         ;

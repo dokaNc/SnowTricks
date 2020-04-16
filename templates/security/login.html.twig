@@ -1,45 +1,59 @@
-{% extends 'base.html.twig' %}
+{% extends '/base/baseNew.html.twig' %}
 
-{% block title %}Sign in{% endblock %}
+{% block title 'Login' %}
 
 {% block content %}
-    <div class="container">
-        <form method="post">
-            <h1 class="h3 mb-5 mt-3 text-center font-weight-bold">Sign in</h1>
-            {% if error %}
-                <div class="alert alert-danger">{{ error.messageKey | trans(error.messageData, 'security') }}</div>
-            {% endif %}
-            <div class="form-group">
-                <label for="inputUsername">Username</label>
-                <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" required autofocus>
+
+    <!-- Begin page content -->
+    <div id="wrapper">
+        <!-- Section -->
+        <section class="fullscreen" style="background-image: url(/images/pages/login-wallpaper.jpg)">
+            <div class="container container-fullscreen">
+                <div class="text-middle">
+                    <div class="row">
+                        <div class="box-login col-xs-4 col-md-4 center p-30 background-white b-r-6">
+                            <a href="{{ path('app_home') }}" style="font-weight: bolder"><i class="fas fa-arrow-circle-left fa-lg m-b-10"></i> Back to home</a>
+                            <a href="{{ path('app_register') }}" class="float-right" style="font-weight: bolder">Register account <i class="fas fa-arrow-circle-right fa-lg m-b-10"></i></a>
+                            <hr>
+                            {% include '/base/alertMessage.html.twig' %}
+                            <h3 class="text-center" style="font-weight: bolder">User Login</h3>
+                            <form method="post" class="form-transparent-grey">
+                                {% if error %}
+                                    <div class="alert alert-danger">{{ error.messageKey | trans(error.messageData, 'security') }}</div>
+                                {% endif %}
+                                <div class="form-group">
+
+                                    <div class="input-icons">
+                                        <label class="sr-only">Username</label>
+                                        <i class="fas fa-user-tie iconx"></i>
+                                        <input type="text" placeholder="Username" name="username" id="inputUsername" class="form-control input-field" required>
+                                    </div>
+                                </div>
+
+                                <div class="input-icons">
+                                    <div class="form-group m-b-5">
+                                        <label class="sr-only">Password</label>
+                                        <i class="fas fa-unlock-alt iconx"></i>
+                                        <input type="password" name="password" class="form-control input-field" id="inputPassword" placeholder="Password" required>
+                                    </div>
+                                </div>
+
+                                <input type="hidden" name="_csrf_token"
+                                       value="{{ csrf_token('authenticate') }}">
+
+
+                                <div class="text-left form-group">
+                                    <button type="submit" class="btn btn-icon-holder btn-shadow btn-light-hover btn-light-hover">Login<i class="fa fa-arrow-right"></i></button>
+                                </div>
+
+                            </form>
+                            <a href="{{ path('app_forgotten_password') }}"><small>Lost your Password?</small></a>
+                            <p class="small">Don't have an account yet? <a href="{{ path('app_register') }}">Register New Account</a>
+                            </p>
+                        </div>
+                    </div>
             </div>
-            <div class="form-group">
-            <label for="inputPassword">Password</label>
-            <input type="password" name="password" id="inputPassword" class="form-control" required>
-            </div>
-
-            <input type="hidden" name="_csrf_token"
-                   value="{{ csrf_token('authenticate') }}"
-            >
-
-            {#
-                Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-                See https://symfony.com/doc/current/security/remember_me.html
-
-                <div class="checkbox mb-3">
-                    <label>
-                        <input type="checkbox" name="_remember_me"> Remember me
-                    </label>
-                </div>
-            #}
-
-            <button class="btn btn-lg btn-primary" type="submit">
-                Sign in
-            </button>
-        </form>
-
-        <div>
-            <a href="{{ path('app_forgotten_password') }}">Forgotten password ?</a>
-        </div>
+        </section>
+        <!-- end: Section -->
     </div>
 {% endblock %}

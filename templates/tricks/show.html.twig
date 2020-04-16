@@ -1,61 +1,107 @@
-{% extends 'base.html.twig' %}
+{% extends 'base/baseNew.html.twig' %}
 
 {% block title tricks.name %}
 
 {% block content %}
 
-<div class="container">
-    <div class="text-center" style="margin-top: 50px;">
-        <h1>{{ tricks.name }}</h1>
-    </div>
+<!--START: Show Source (Main Image, Image, Video)-->
+{% include '/includes/sourceShow.html.twig' %}
+<!--END: Show Source (Main Image, Image, Video)-->
 
-    <hr>
-
-    <div>
-        {% include 'includes/sourceShow.html.twig' %}
-    </div>
-
-    <hr>
-
-    <div class="container mt-4">
-        <h3>Description: {{ tricks.content }}</h3>
-        <p>Category: {{ tricks.category }}</p>
-    </div>
-
-    <hr>
-
-
-    {% if tricks.comments|length > 0 %}
-        <h2 class="mb-3">Comments</h2>
-        {% for comment in tricks.comments %}
-            <div class="bg-light rounded mb-3 py-3 px-3">
-                <strong>{{ comment.author.username }}</strong> say :
-                <blockquote>
-                    {{ comment.content }}
-                </blockquote>
-
-                {% if app.user and app.user == comment.author %}
-
-                    <img src="/img/{{ app.user.avatar }}" class="avatar-mini" alt="Avatar de {{ app.user.username }}" style="width: auto; height: 200px;">
-
-                    <a href="{{ path('comment.delete', {'id': comment.id}) }}" class="btn btn-danger" style="float: right;">
-                    <i class="fas fa-trash"></i>
-                </a>
-                {% endif %}
+    <!--START: Container-->
+    <div class="container m-t-20">
+        <div class="row">
+            <!--START: Content-->
+            <div class="col-lg-12">
+                <div class="text-center m-b-20">
+                    <span class="lead">{{ tricks.content }}</span>
+                </div>
             </div>
-        {% endfor %}
-    {% else %}
-        <h2>This tricks don't have comments</h2>
-    {% endif %}
+            <!--END: Content-->
+        </div>
 
-    {% if app.user %}
+        <!--START: Create , Update, Date-->
+        <div class="single-post">
+            <div class="post-item">
+                <div class="post-item-wrap">
+                    <div class="post-tags text-center">
+                        <a>Create : {{ tricks.createdAt|date("d/m/Y") }}</a>
+                        <a>Update : {{ tricks.updatedAt|date("d/m/Y") }}</a>
+                        <a>Tags : {{ tricks.category }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--END: Create , Update, Date-->
+        <hr>
+    </div>
+    <!--END: Container-->
 
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button type="submit" class="btn btn-success">Send</button>
-    {{ form_end(form) }}
+    <!--START: Container-->
+{% if app.user %}
+    <div class="container m-b-35">
+        <!--START: Form Comment-->
+        <div class="row">
+            <div class="col-lg-12 center m-b-20 m-t-20">
+                          {{ form_start(form) }}
+                          {{ form_widget(form) }}
+                          <div class="text-center">
+                               <button type="submit" class="btn btn-default">Leave a comment</button>
+                          </div>
+                          {{ form_end(form) }}
+            </div>
+        </div>
+    <!--END: Form Comment-->
+        <hr>
+{% endif %}
 
-    {% endif %}
-</div>
 
+        <!--START: Show Comment-->
+        {% if tricks.comments|length > 0 %}
+
+                     <div class="comments">
+                     {% for comment in tricks.comments %}
+
+                         <div class="posts_more">
+                             <!-- holder -->
+                             <div class="holder">
+                                 {% if app.user and app.user == comment.author %}
+                                     <a href="{{ path('comment.delete', {'slug': slug, 'idtricks': idtricks, 'id': comment.id}) }}" class="badge-red" style="float: right;">
+                                         <i class="fas fa-trash"></i>
+                                     </a>
+                                 {% endif %}
+                                 <div class="comment-list">
+                                     <div class="comment">
+                                         <div class="image"><img alt="" src="/img/{{ app.user.avatar }}" class="avatar"></div>
+                                         <div class="text">
+                                             <h5 class="name" style="text-transform: uppercase">{{ comment.author.username }}</h5>
+                                             <span class="comment_date">{{ comment.createdAt|date("Y-m-d H:i:s") }}</span>
+                                             <div class="text_holder">
+                                                 <p>{{ comment.content }}</p>
+                                             </div>
+                                         </div>
+                                     </div>
+                                 </div>
+                             </div>
+                     </div>
+                    {% endfor %}
+        </div>
+
+            <!-- btn holder -->
+            <div class="container text-center btnHolder">
+                <button id="btnMore" class="btn">Load More</button>
+            </div>
+
+        {% else %}
+            <h2 class="text-center">This tricks don't have comment</h2>
+        {% endif %}
+        <!--END: Show Comment-->
+    </div>
+    <!--END: Container-->
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js2/custom.js') }}"></script>
+    <script src="/js/tricks.js"></script>
 {% endblock %}

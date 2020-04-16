@@ -100,5 +100,10 @@ class UserTricksController extends AbstractController
     public function delete(Tricks $tricks)
     {
         $this->tricksService->deleteTrick($tricks);
+
+        $this->addFlash(
+            'success',
+            'Your trick has been deleted'
+        );
     }
 }

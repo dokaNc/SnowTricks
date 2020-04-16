@@ -18,13 +18,13 @@ class TricksType extends AbstractType
             ->add('name', TextType::class, [
                 'label' => 'Name',
                 'attr' => [
-                    'placeholder' => 'Name'
+                    'placeholder' => 'Enter Name ...'
                 ]
             ])
             ->add('content', TextareaType::class, [
                 'label' => 'Content',
                 'attr' => [
-                    'placeholder' => 'Content'
+                    'placeholder' => 'Enter Description ...'
                 ]
             ])
             ->add('category', ChoiceType::class, [

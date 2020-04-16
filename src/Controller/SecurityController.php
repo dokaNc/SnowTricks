@@ -49,7 +49,7 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/forgottenPassword", name="app_forgotten_password")
+     * @Route("/reset_password", name="app_forgotten_password")
      * @param Request $request
      * @param UserPasswordEncoderInterface $encoder
      * @param \Swift_Mailer $mailer
@@ -67,8 +67,8 @@ class SecurityController extends AbstractController
             $user = $entityManager->getRepository(User::class)->findOneBy(['username' => $username]);
             /* @var $user User */
             if ($user === null) {
-                $this->addFlash('danger', 'Unknown Username');
-                return $this->redirectToRoute('home');
+                $this->addFlash('danger', 'Unknown Username!');
+                return $this->redirectToRoute('app_forgotten_password');
             }
             // generate uuid for validation token
             $regToken = uuid_create((UUID_TYPE_RANDOM));
@@ -81,15 +81,15 @@ class SecurityController extends AbstractController
 
                 return $this->redirectToRoute('home');
             }
-            $url = $this->generateUrl('app_reset_password', array('reg_token' => $regToken), UrlGeneratorInterface::ABSOLUTE_URL);
+            $url = $this->generateUrl('app_reset_password', array('reg_token' => $regToken, 'username' => $username), UrlGeneratorInterface::ABSOLUTE_URL);
             $message = (new \Swift_Message('Forgot Password'))
                 ->setFrom('cirpan.dogukan5959@gmail.com')
                 ->setTo($user->getEmail())
                 ->setBody("Reset password link: " . $url, 'text/html');
             $mailer->send($message);
-            $this->addFlash('warning', 'Check your email and click on the reset password link, thank you.');
+            $this->addFlash('info', 'Password reset link has been sent to your email.');
 
-            return $this->redirectToRoute('app_home');
+            return $this->redirectToRoute('app_login');
         }
 
         return $this->render('security/forgotten_password.html.twig', [
@@ -97,27 +97,25 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/reset_password/{reg_token}", name="app_reset_password")
+     * @Route("/reset_password/{username}/{reg_token}", name="app_reset_password")
      */
-    public function resetPassword(Request $request, string $reg_token, UserPasswordEncoderInterface $passwordEncoder)
+    public function resetPassword(Request $request, string $reg_token, string $username, UserPasswordEncoderInterface $passwordEncoder)
     {
         $form = $this->createForm(ResetPasswordFormType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() and $form->isValid()) {
             $plainPassword = $form->get('plainPassword')->getData();
-            $username = $form->get('username')->getData();
             $entityManager = $this->getDoctrine()->getManager();
-            $user = $entityManager->getRepository(User::class)->findOneBy(['reg_token' => $reg_token]);
+            $user = $entityManager->getRepository(User::class)->findOneBy(['reg_token' => $reg_token, 'username' => $username]);
             /* @var $user User */
-            if ($user === null or $username != $user->getUsername()) {
-                $this->addFlash('danger', 'Unknown User');
-
-                return $this->redirectToRoute('app_home');
+            if ($user === null) {
+                $this->addFlash('danger', 'Expired Link!');
+                return $this->redirectToRoute('app_login');
             }
             $user->setRegToken(null);
             $user->setPassword($passwordEncoder->encodePassword($user, $plainPassword));
             $entityManager->flush();
-            $this->addFlash('info', 'Password updated !');
+            $this->addFlash('success', 'Password updated!');
 
             return $this->redirectToRoute('app_login');
         }
