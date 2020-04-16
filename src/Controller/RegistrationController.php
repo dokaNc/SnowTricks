@@ -25,42 +25,28 @@ class RegistrationController extends AbstractController
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
             $user->setPassword(
-                $passwordEncoder->encodePassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                )
+                $passwordEncoder->encodePassword($user, $form->get('plainPassword')->getData())
             );
 
             // generate uuid for validation token
             $regToken = uuid_create((UUID_TYPE_RANDOM));
             $user->setRegToken($regToken);
-
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
 
             // do anything else you need here, like send an email
-
-            $message = (new \Swift_Message('Account confirmation'))
-                ->setFrom(['cirpan.dogukan5959@gmail.com' => 'SnowTricks'])
-                ->setTo($user->getEmail())
+            $message = (new \Swift_Message('Account confirmation')) ->setFrom(['cirpan.dogukan5959@gmail.com' => 'SnowTricks']) ->setTo($user->getEmail())
                 ->setSubject('Register confirmation link')
                 ->setBody($this->renderView('email/register.html.twig', ['token' => $regToken]), 'text/html');
             $mailer->send($message);
             $this->addFlash('info', 'Check your email and click on the confirmation link, thank you.');
-
             return $this->redirectToRoute('app_home');
-
         }
-
-        return $this->render('registration/register.html.twig', [
-            'registrationForm' => $form->createView(),
-            'current_menu' => 'register'
-        ]);
+        return $this->render('registration/register.html.twig', ['registrationForm' => $form->createView(), 'current_menu' => 'register']);
     }
 
     /**

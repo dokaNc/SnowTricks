@@ -15,32 +15,17 @@ class AccountType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('username', TextType::class, [
-                'attr' => [
-                    'class' => 'text-center',
-                    'style' => 'text-transform: Capitalize;'
-                ]
+            ->add('username', TextType::class, ['attr' => ['class' => 'text-center', 'style' => 'text-transform: Capitalize;']
             ])
-            ->add('email', TextType::class, [
-                'attr' => [
-                    'class' => 'text-center',
-                ]
+            ->add('email', TextType::class, ['attr' => ['class' => 'text-center',]
             ])
             ->add('avatar', FileType::class, [
                 'label' => 'Avatar (JPEG/PNG file)',
-                'attr' => [
-                    'class' => 'btn btn-light btn-shadow',
-                    'style' => 'display: inline;'
-                ],
+                'attr' => ['class' => 'btn btn-light btn-shadow', 'style' => 'display: inline;'],
                 'mapped' => false,
                 'required' => false,
                 'constraints' => [
-                    new File([
-                        'maxSize' => '1024k',
-                        'mimeTypes' => [
-                            'image/jpeg',
-                            'image/png'
-                        ],
+                    new File(['maxSize' => '1024k', 'mimeTypes' => ['image/jpeg', 'image/png'],
                         'mimeTypesMessage' => 'Please upload a valid image (jpg, jpeg, png)',
                     ])
                 ],

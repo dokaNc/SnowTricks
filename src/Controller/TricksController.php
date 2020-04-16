@@ -45,29 +45,17 @@ class TricksController extends AbstractController
     public function show(Tricks $tricks, Request $request, ObjectManager $entityManager, string $slug): Response
     {
         $comment = new Comment();
-
         $form = $this->createForm(CommentType::class, $comment);
-
         $form->handleRequest($request);
-
         if($form->isSubmitted() && $form->isValid()) {
             $comment->setTrick($tricks)
                 ->setAuthor($this->getUser());
-
             $entityManager->persist($comment);
             $entityManager->flush();
-
-            $this->addFlash(
-                'success',
-                "Your comment has been added"
-            );
+            $this->addFlash('success', "Your comment has been added");
         }
-
         if ($tricks->getSlug() !== $slug) {
-            return $this->redirectToRoute('tricks.show', [
-                'id'   => $tricks->getId(),
-                'slug' => $tricks->getSlug()
-            ], 301);
+            return $this->redirectToRoute('tricks.show', ['id'   => $tricks->getId(), 'slug' => $tricks->getSlug()], 301);
         }
         return $this->render('tricks/show.html.twig', [
             'tricks' => $tricks,
