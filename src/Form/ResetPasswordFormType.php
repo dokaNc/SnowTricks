@@ -27,30 +27,14 @@ class ResetPasswordFormType extends AbstractType
     {
         $builder
             ->add('plainPassword', PasswordType::class, [
-                'label' => false,
-                'mapped' => false,
-                'required' => true,
-                'attr' => [
-                    'placeholder' => 'Password',
-                    'class' => 'input-field'
-                ],
+                'label' => false, 'mapped' => false, 'required' => true,
+                'attr' => ['placeholder' => 'Password', 'class' => 'input-field'],
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'Please enter a password',
-                    ]),
-                    new Length([
-                        'min' => 6,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
-                        // max length allowed by Symfony for security reasons
-                        'max' => 4096,
-                    ]),
-                ],
+                    new NotBlank(['message' => 'Please enter a password',]),
+                    new Length(['min' => 6, 'minMessage' => 'Your password should be at least {{ limit }} characters', 'max' => 4096,]),],
             ])
             ->add('token', HiddenType::class, ['data' => '{{ token }}'])
-            ->add('reset', SubmitType::class, [
-                'attr' => [
-                    'class' => 'btn btn-default'
-                ]
+            ->add('reset', SubmitType::class, ['attr' => ['class' => 'btn btn-default']
             ]);
     }
 

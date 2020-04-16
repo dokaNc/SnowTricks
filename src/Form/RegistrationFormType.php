@@ -21,52 +21,19 @@ class RegistrationFormType extends AbstractType
     {
         $builder
             ->add('username', TextType::class, [
-                'label' => false,
-                'attr' => [
-                    'placeholder' => 'Username',
-                    'class' => 'input-field'
-                ]
-            ])
+                'label' => false, 'attr' => ['placeholder' => 'Username', 'class' => 'input-field']])
             ->add('email', TextType::class, [
-                'label' => false,
-                'attr' => [
-                    'placeholder' => 'Email',
-                    'class' => 'input-field'
-                ],
-                'constraints' => [
+                'label' => false, 'attr' => ['placeholder' => 'Email', 'class' => 'input-field'], 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter a email address',
-                    ]),
-                ],
-            ])
-
-            ->add('plainPassword', PasswordType::class, [
-                // instead of being set onto the object directly,
-                // this is read and encoded in the controller
-                'label' => false,
-                'attr' => [
-                    'placeholder' => 'Password',
-                    'class' => 'input-field'
-                ],
+                    'message' => 'Please enter a email address',]),],
+                ])
+            ->add('plainPassword', PasswordType::class, ['label' => false, 'attr' => ['placeholder' => 'Password', 'class' => 'input-field'],
                 'mapped' => false,
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Please enter a password',
-                    ]),
-                    new Length([
-                        'min' => 6,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
-                        // max length allowed by Symfony for security reasons
-                        'max' => 4096,
-                    ]),
-                ],
-            ])
+                'constraints' => [new NotBlank(['message' => 'Please enter a password',]),
+                    new Length(['min' => 6, 'minMessage' => 'Your password should be at least {{ limit }} characters', 'max' => 4096,]),],
+                ])
             ->add('sendMail', SubmitType::class, [
-                'attr' => [
-                    'class' => 'btn btn-default'
-                ],
-                'label' => 'Register'
-            ]);
+                'attr' => ['class' => 'btn btn-default'], 'label' => 'Register']);
         ;
     }
 

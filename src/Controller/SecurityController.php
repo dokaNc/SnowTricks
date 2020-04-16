@@ -60,40 +60,23 @@ class SecurityController extends AbstractController
         $userInfo = ['username' => null];
         $form = $this->createForm(ForgottenPasswordFormType::class, $userInfo);
         $form->handleRequest($request);
-        if ($form->isSubmitted() and $form->isValid()) {
-            $userInfo = $form->getData();
-            $username = $userInfo['username'];
-            $entityManager = $this->getDoctrine()->getManager();
+        if ($form->isSubmitted() and $form->isValid()) { $userInfo = $form->getData(); $username = $userInfo['username']; $entityManager = $this->getDoctrine()->getManager();
             $user = $entityManager->getRepository(User::class)->findOneBy(['username' => $username]);
             /* @var $user User */
-            if ($user === null) {
-                $this->addFlash('danger', 'Unknown Username!');
-                return $this->redirectToRoute('app_forgotten_password');
-            }
+            if ($user === null) {$this->addFlash('danger', 'Unknown Username!');return $this->redirectToRoute('app_forgotten_password');}
             // generate uuid for validation token
             $regToken = uuid_create((UUID_TYPE_RANDOM));
-
-            try {
-                $user->setRegToken($regToken);
-                $entityManager->flush();
-            } catch (\Exception $e) {
-                $this->addFlash('warning', $e->getMessage());
-
+            try {$user->setRegToken($regToken); $entityManager->flush();
+            } catch (\Exception $e) {$this->addFlash('warning', $e->getMessage());
                 return $this->redirectToRoute('home');
-            }
-            $url = $this->generateUrl('app_reset_password', array('reg_token' => $regToken, 'username' => $username), UrlGeneratorInterface::ABSOLUTE_URL);
+            } $url = $this->generateUrl('app_reset_password', array('reg_token' => $regToken, 'username' => $username), UrlGeneratorInterface::ABSOLUTE_URL);
             $message = (new \Swift_Message('Forgot Password'))
-                ->setFrom('cirpan.dogukan5959@gmail.com')
-                ->setTo($user->getEmail())
-                ->setBody("Reset password link: " . $url, 'text/html');
+                ->setFrom('cirpan.dogukan5959@gmail.com') ->setTo($user->getEmail()) ->setBody("Reset password link: " . $url, 'text/html');
             $mailer->send($message);
             $this->addFlash('info', 'Password reset link has been sent to your email.');
-
             return $this->redirectToRoute('app_login');
         }
-
-        return $this->render('security/forgotten_password.html.twig', [
-            'forgottenPasswordForm' => $form->createView()]);
+        return $this->render('security/forgotten_password.html.twig', ['forgottenPasswordForm' => $form->createView()]);
     }
 
     /**
