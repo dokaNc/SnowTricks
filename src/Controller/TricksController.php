@@ -67,7 +67,7 @@ class TricksController extends AbstractController
     }
 
     /**
-     * @Route("/tricks/comment/delete/{slug}-{idtricks}/{id}", name="comment.delete")
+     * @Route("/tricks/comment/delete/{slug}-{idtricks}/{id}", name="comment.delete", requirements={"slug": "[a-z0-9\-]*"})
      * @param Comment $comment
      * @param string $slug
      * @param string $idtricks

@@ -1,6 +1,4 @@
 .vscode/
-/public/img/
-/public/uploads/images/
 .idea/
 ###> symfony/framework-bundle ###
 /.env.local
